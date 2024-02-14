@@ -37,6 +37,10 @@ export default function IdRegisterScreen() {
       formData.append("image", blob, "id-card");
 
       //await axios post, form data, headers: content type : multipart/formData
+
+      //navigate
+
+      //alert successfully upload, now please register
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +49,7 @@ export default function IdRegisterScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.upperContent}>
-        <Text style={styles.logo}>LactaLink</Text>
+        <Logo size={24} />
         <Text style={styles.tagline}>
           Moms helping moms, every step of the way.
         </Text>
@@ -78,18 +82,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   upperContent: {
-    height: "40%",
+    height: "45%",
     justifyContent: "flex-end",
     alignItems: "center",
     padding: 10,
   },
-  logo: {
-    fontWeight: "800",
-    fontSize: 24,
-    color: "#8CB9BD",
-    marginBottom: 7,
-  },
   tagline: {
+    marginTop: 7,
     fontSize: 17,
     color: "#1f2937",
     fontWeight: "500",
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
     color: "#1f2937",
   },
   bottomContent: {
-    height: "60%",
+    height: "55%",
     backgroundColor: "#8CB9BD",
     borderTopLeftRadius: 200,
     borderTopRightRadius: 200,
