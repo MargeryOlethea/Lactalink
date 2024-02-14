@@ -48,14 +48,14 @@ export default function IdRegisterScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.upperContent}>
+      <View style={styles.upperContainer}>
         <Logo size={24} />
         <Text style={styles.tagline}>
           Moms helping moms, every step of the way.
         </Text>
         <Text style={styles.joinText}>Join our community now!</Text>
       </View>
-      <View style={styles.bottomContent}>
+      <View style={styles.bottomContainer}>
         <Text style={styles.instruction}>
           Upload your Indonesian ID Card here!
         </Text>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  upperContent: {
+  upperContainer: {
     height: "45%",
     justifyContent: "flex-end",
     alignItems: "center",
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     color: "#1f2937",
   },
-  bottomContent: {
+  bottomContainer: {
     height: "55%",
     backgroundColor: "#8CB9BD",
     borderTopLeftRadius: 200,

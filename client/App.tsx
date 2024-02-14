@@ -12,8 +12,8 @@ import HomeScreen from "./screens/HomeScreen";
 export default function App() {
   return (
     <>
-      {/* <LoginScreen /> */}
-      <RegisterScreen />
+      <LoginScreen />
+      {/* <RegisterScreen /> */}
       {/* <IdRegisterScreen /> */}
       {/* <ChatListScreen /> */}
       {/* <ChatRoomScreen /> */}
