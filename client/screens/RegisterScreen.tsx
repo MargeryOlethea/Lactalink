@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -74,8 +75,15 @@ export default function RegisterScreen() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Logo size={30} />
+        <Logo size={40} />
         <Text style={styles.title}>Register your account</Text>
+
+        <View style={styles.subTitle}>
+          <Text style={styles.subTitleText}>Already have an account? </Text>
+          <Pressable>
+            <Text style={styles.pressableText}>Log in here</Text>
+          </Pressable>
+        </View>
       </View>
 
       {/* FORM START */}
@@ -145,7 +153,7 @@ export default function RegisterScreen() {
               valueField="id"
               placeholder="your city..."
               onChange={(city) => setSelectedCity(city.id)}
-              value={selectedProvince}
+              value={selectedCity}
             />
           </>
         )}
@@ -157,8 +165,9 @@ export default function RegisterScreen() {
           placeholder="your profile picture URL"
         />
 
+        {/* BUTTON */}
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.registerText}>Register Account</Text>
+          <Text style={styles.buttonText}>Register Account</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -174,6 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     marginTop: 10,
+    color: "#1f2937",
   },
   form: {
     backgroundColor: "#8CB9BD",
@@ -214,8 +224,22 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     marginHorizontal: "auto",
   },
-  registerText: {
+  buttonText: {
     color: "white",
     fontWeight: "600",
+  },
+  subTitle: {
+    flexDirection: "row",
+    marginTop: 5,
+  },
+  subTitleText: {
+    color: "#1f2937",
+    fontSize: 12,
+  },
+  pressableText: {
+    fontWeight: "600",
+    color: "#8CB9BD",
+    fontSize: 12,
+    textDecorationLine: "underline",
   },
 });
