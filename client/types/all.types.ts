@@ -1,3 +1,4 @@
+// REGISTER USER
 export type RegisterUser = {
   name: string;
   email: string;
@@ -8,11 +9,13 @@ export type RegisterUser = {
   role: string;
 };
 
+// FETCH LOCATION
 export type LocationFetchResponse = {
   id: string;
   name: string;
 };
 
+// REGISTER DETAIL
 export type RegisterDetail = {
   babyName: string;
   babyDOB: string;
@@ -29,4 +32,11 @@ export type RegisterDetail = {
   readMeat: boolean;
   spicyFood: boolean;
   caffeine: boolean;
+};
+
+// CREATE NEW MILK POST
+export type MilkForm = {
+  totalBag: string;
+  totalMl: string;
+  pumpDate: string;
 };
