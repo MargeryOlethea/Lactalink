@@ -1,7 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Logo({ size }: { size: number }) {
-  return <Text style={[styles.logo, { fontSize: size }]}>LactaLink</Text>;
+export default function Logo({
+  size,
+  color,
+}: {
+  size?: number;
+  color?: string;
+}) {
+  return (
+    <Text style={[styles.logo, { fontSize: size, color }]}>LactaLink</Text>
+  );
 }
 
 const styles = StyleSheet.create({
