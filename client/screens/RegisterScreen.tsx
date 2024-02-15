@@ -73,104 +73,106 @@ export default function RegisterScreen() {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Logo size={40} />
-        <Text style={styles.title}>Register your account</Text>
+    <>
+      <ScrollView>
+        <View style={styles.container}>
+          <Logo size={40} />
+          <Text style={styles.title}>Register your account</Text>
 
-        <View style={styles.subTitle}>
-          <Text style={styles.subTitleText}>Already have an account? </Text>
-          <Pressable>
-            <Text style={styles.pressableText}>Log in here</Text>
-          </Pressable>
+          <View style={styles.subTitle}>
+            <Text style={styles.subTitleText}>Already have an account? </Text>
+            <Pressable>
+              <Text style={styles.pressableText}>Log in here</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
 
-      {/* FORM START */}
-      <View style={styles.form}>
-        {/* ROLE */}
-        <Text style={styles.label}>Role</Text>
-        <Dropdown
-          style={styles.dropdownInput}
-          data={roleDropdown}
-          placeholderStyle={{ fontSize: 14, color: "#bdbcbb" }}
-          selectedTextStyle={{ fontSize: 14 }}
-          labelField="label"
-          valueField="value"
-          placeholder="your role..."
-          onChange={(role) => handleInput("role", role.value)}
-          value={formRegister.role}
-        />
+        {/* FORM START */}
+        <View style={styles.form}>
+          {/* ROLE */}
+          <Text style={styles.label}>Role</Text>
+          <Dropdown
+            style={styles.dropdownInput}
+            data={roleDropdown}
+            placeholderStyle={{ fontSize: 14, color: "#bdbcbb" }}
+            selectedTextStyle={{ fontSize: 14 }}
+            labelField="label"
+            valueField="value"
+            placeholder="your role..."
+            onChange={(role) => handleInput("role", role.value)}
+            value={formRegister.role}
+          />
 
-        {/* NAME */}
-        <Text style={styles.label}>Name</Text>
-        <TextInput style={styles.input} placeholder="your name" />
+          {/* NAME */}
+          <Text style={styles.label}>Name</Text>
+          <TextInput style={styles.input} placeholder="your name" />
 
-        {/* EMAIL */}
-        <Text style={styles.label}>Email</Text>
-        <TextInput style={styles.input} placeholder="your e-mail" />
+          {/* EMAIL */}
+          <Text style={styles.label}>Email</Text>
+          <TextInput style={styles.input} placeholder="your e-mail" />
 
-        {/* PHONE NUMBER */}
-        <Text style={styles.label}>Phone Number</Text>
-        <TextInput style={styles.input} placeholder="your phone number" />
+          {/* PHONE NUMBER */}
+          <Text style={styles.label}>Phone Number</Text>
+          <TextInput style={styles.input} placeholder="your phone number" />
 
-        {/* PASSWORD */}
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          secureTextEntry={true}
-          placeholder="your password"
-        />
+          {/* PASSWORD */}
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry={true}
+            placeholder="your password"
+          />
 
-        {/* PROVINSI */}
-        {provincesList && (
-          <>
-            <Text style={styles.label}>Province</Text>
-            <Dropdown
-              style={styles.dropdownInput}
-              data={provincesList}
-              placeholderStyle={{ fontSize: 14, color: "#bdbcbb" }}
-              selectedTextStyle={{ fontSize: 14 }}
-              labelField="name"
-              valueField="id"
-              placeholder="your province..."
-              onChange={(province) => setSelectedProvince(province.id)}
-              value={selectedProvince}
-            />
-          </>
-        )}
+          {/* PROVINSI */}
+          {provincesList && (
+            <>
+              <Text style={styles.label}>Province</Text>
+              <Dropdown
+                style={styles.dropdownInput}
+                data={provincesList}
+                placeholderStyle={{ fontSize: 14, color: "#bdbcbb" }}
+                selectedTextStyle={{ fontSize: 14 }}
+                labelField="name"
+                valueField="id"
+                placeholder="your province..."
+                onChange={(province) => setSelectedProvince(province.id)}
+                value={selectedProvince}
+              />
+            </>
+          )}
 
-        {/* KOTA */}
-        {citiesList && selectedProvince && (
-          <>
-            <Text style={styles.label}>City</Text>
-            <Dropdown
-              style={styles.dropdownInput}
-              data={citiesList}
-              placeholderStyle={{ fontSize: 14, color: "#bdbcbb" }}
-              selectedTextStyle={{ fontSize: 14 }}
-              labelField="name"
-              valueField="id"
-              placeholder="your city..."
-              onChange={(city) => setSelectedCity(city.id)}
-              value={selectedCity}
-            />
-          </>
-        )}
+          {/* KOTA */}
+          {citiesList && selectedProvince && (
+            <>
+              <Text style={styles.label}>City</Text>
+              <Dropdown
+                style={styles.dropdownInput}
+                data={citiesList}
+                placeholderStyle={{ fontSize: 14, color: "#bdbcbb" }}
+                selectedTextStyle={{ fontSize: 14 }}
+                labelField="name"
+                valueField="id"
+                placeholder="your city..."
+                onChange={(city) => setSelectedCity(city.id)}
+                value={selectedCity}
+              />
+            </>
+          )}
 
-        {/* PROFILE PICTURE URL */}
-        <Text style={styles.label}>Profile Picture</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="your profile picture URL"
-        />
+          {/* PROFILE PICTURE URL */}
+          <Text style={styles.label}>Profile Picture</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="your profile picture URL"
+          />
 
-        {/* BUTTON */}
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Register Account</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          {/* BUTTON */}
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Register Account</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </>
   );
 }
 

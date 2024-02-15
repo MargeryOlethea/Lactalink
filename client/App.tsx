@@ -12,13 +12,13 @@ import HomeScreen from "./screens/HomeScreen";
 export default function App() {
   return (
     <>
-      <LoginScreen />
+      {/* <LoginScreen /> */}
       {/* <RegisterScreen /> */}
       {/* <IdRegisterScreen /> */}
       {/* <ChatListScreen /> */}
       {/* <ChatRoomScreen /> */}
       {/* <CreateMilkScreen /> */}
-      {/* <DetailRegisterScreen /> */}
+      <DetailRegisterScreen />
       {/* <HomeScreen /> */}
     </>
   );
