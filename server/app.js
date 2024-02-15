@@ -7,11 +7,9 @@ const mongoose = require("mongoose")
 const router = require("./routers/index");
 
 // untuk menentukan nama database, isi di url paling belakang
-// link project
-mongoose.connect("mongodb+srv://reinardusk:hasahihanghoheng@cluster0.peypini.mongodb.net/lactalinkDB")
 
-// link coba-coba
-// mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
+// link project
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
 
 // SET UP EXPRESS
 const express = require("express");
