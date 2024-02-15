@@ -14,7 +14,6 @@ export default function RootNavigation() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerShown: false,
         tabBarStyle: { backgroundColor: "white" },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: ComponentProps<typeof Ionicons>["name"] = "home";
@@ -36,8 +35,16 @@ export default function RootNavigation() {
         tabBarInactiveTintColor: "gray",
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Create" component={CreateMilkScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Create"
+        component={CreateMilkScreen}
+        options={{ title: "Create New Post" }}
+      />
       <Tab.Screen name="Chats" component={ChatListScreen} />
     </Tab.Navigator>
   );

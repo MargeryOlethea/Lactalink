@@ -1,20 +1,23 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ChatListScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Chat List Screen</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.chatHolder}>
+          <Text>XIXIXI</Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    minHeight: 680,
+  },
+  chatHolder: {
+    backgroundColor: "white",
   },
 });

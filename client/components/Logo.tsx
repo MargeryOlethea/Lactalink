@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text } from "react-native";
 
 export default function Logo({
   size,
@@ -8,14 +8,14 @@ export default function Logo({
   color?: string;
 }) {
   return (
-    <Text style={[styles.logo, { fontSize: size, color }]}>LactaLink</Text>
+    <Text
+      style={{
+        fontWeight: "800",
+        fontSize: size ? size : 20,
+        color: color ? color : "#8CB9BD",
+      }}
+    >
+      LactaLink
+    </Text>
   );
 }
-
-const styles = StyleSheet.create({
-  logo: {
-    fontWeight: "800",
-    fontSize: 20,
-    color: "#8CB9BD",
-  },
-});
