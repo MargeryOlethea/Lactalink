@@ -8,18 +8,21 @@ import ChatRoomScreen from "./screens/ChatRoomScreen";
 import CreateMilkScreen from "./screens/CreateMilkScreen";
 import DetailRegisterScreen from "./screens/DetailRegisterScreen";
 import HomeScreen from "./screens/HomeScreen";
+import RootNavigation from "./navigations/RootNavigation";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   return (
     <>
-      {/* <LoginScreen /> */}
-      {/* <RegisterScreen /> */}
-      {/* <IdRegisterScreen /> */}
-      {/* <ChatListScreen /> */}
-      {/* <ChatRoomScreen /> */}
-      {/* <CreateMilkScreen /> */}
-      <DetailRegisterScreen />
-      {/* <HomeScreen /> */}
+      <NavigationContainer>
+        <RootNavigation />
+
+        {/* DONE */}
+        {/* <IdRegisterScreen /> */}
+        {/* <RegisterScreen /> */}
+        {/* <LoginScreen /> */}
+        {/* <DetailRegisterScreen /> */}
+      </NavigationContainer>
     </>
   );
 }

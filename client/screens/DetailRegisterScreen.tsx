@@ -253,7 +253,7 @@ export default function DetailRegisterScreen() {
           <Text style={styles.checkboxText}>Caffeine</Text>
         </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: 30 }}>
           <View style={styles.agreementContainer}>
             <Checkbox
               value={formHonesty}
