@@ -1,3 +1,4 @@
+import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { HomeNavigationParamList } from "../types/all.types";

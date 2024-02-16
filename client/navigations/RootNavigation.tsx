@@ -1,6 +1,5 @@
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
-import ChatListScreen from "../screens/ChatListScreen";
 import CreateMilkScreen from "../screens/CreateMilkScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ComponentProps } from "react";
