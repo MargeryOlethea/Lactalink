@@ -1,11 +1,23 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Logo from "../components/Logo";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 
-export default function IdRegisterScreen() {
+export default function IdRegisterScreen({ navigation }) {
+  const redirectToLogin = () => {
+    navigation.navigate("login");
+  };
+
+  // HANDLE UPLOAD
   const [image, setImage] = useState<string>();
 
   const imagePicker = async () => {
@@ -55,6 +67,12 @@ export default function IdRegisterScreen() {
           Moms helping moms, every step of the way.
         </Text>
         <Text style={styles.joinText}>Join our community now!</Text>
+        <View style={styles.subTitle}>
+          <Text style={styles.subTitleText}>Already have an account? </Text>
+          <Pressable onPress={redirectToLogin}>
+            <Text style={styles.pressableText}>Log in here</Text>
+          </Pressable>
+        </View>
       </View>
       <View style={styles.bottomContainer}>
         <Text style={styles.instruction}>
@@ -96,7 +114,7 @@ const styles = StyleSheet.create({
   },
   joinText: {
     marginTop: 70,
-    marginBottom: 30,
+    marginBottom: 5,
     color: "#1f2937",
   },
   bottomContainer: {
@@ -128,5 +146,19 @@ const styles = StyleSheet.create({
   uploadText: {
     color: "white",
     fontWeight: "800",
+  },
+  subTitle: {
+    flexDirection: "row",
+    marginBottom: 30,
+  },
+  subTitleText: {
+    color: "#1f2937",
+    fontSize: 12,
+  },
+  pressableText: {
+    fontWeight: "600",
+    color: "#8CB9BD",
+    fontSize: 12,
+    textDecorationLine: "underline",
   },
 });

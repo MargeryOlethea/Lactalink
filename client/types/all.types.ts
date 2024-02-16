@@ -57,28 +57,28 @@ export type HomeNavigationParamList = {
   Chat: { roomId: string };
 };
 
-// HOME PROPS
-export type HomeProps = NativeStackScreenProps<
-  HomeNavigationParamList,
-  "HomeScreen",
-  "Chat"
->;
-
 // CHAT NAVIGATION STACK
 export type ChatNavigationParamList = {
   ChatList: undefined;
   Chat: { roomId: string };
 };
 
-// CHAT PROPS
-export type ChatProps = NativeStackScreenProps<
-  ChatNavigationParamList,
-  "ChatList",
-  "Chat"
->;
+// REGISTER OR LOGIN STACK
+export type UnauthenticateParamList = {
+  login: undefined;
+  registerId: undefined;
+  register: { locationId: string | undefined | null };
+  detailRegister: undefined;
+};
 
 //LOGIN CONTEXT
 export type LoginContextType = {
   isLoggedIn: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+};
+
+// LOGIN FORM
+export type LoginInput = {
+  email: string;
+  password: string;
 };

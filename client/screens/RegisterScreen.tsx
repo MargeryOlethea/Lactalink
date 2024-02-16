@@ -9,12 +9,26 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { LocationFetchResponse, RegisterUser } from "../types/all.types";
+import {
+  LocationFetchResponse,
+  RegisterUser,
+  UnauthenticateParamList,
+} from "../types/all.types";
 import Logo from "../components/Logo";
 import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
 export default function RegisterScreen() {
+  // REDIRECT TO LOGIN
+  const navigation =
+    useNavigation<NativeStackNavigationProp<UnauthenticateParamList>>();
+
+  const redirectToLogin = () => {
+    navigation.navigate("login");
+  };
+
   // HANDLE PROVINCE
   const [provincesList, setProvincesList] = useState<LocationFetchResponse[]>();
   const [selectedProvince, setSelectedProvince] = useState<string>();
@@ -82,7 +96,7 @@ export default function RegisterScreen() {
 
           <View style={styles.subTitle}>
             <Text style={styles.subTitleText}>Already have an account? </Text>
-            <Pressable>
+            <Pressable onPress={redirectToLogin}>
               <Text style={styles.pressableText}>Log in here</Text>
             </Pressable>
           </View>

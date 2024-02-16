@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -8,8 +8,50 @@ import {
   View,
 } from "react-native";
 import Logo from "../components/Logo";
+import { LoginInput, UnauthenticateParamList } from "../types/all.types";
+import axios, { AxiosError } from "axios";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import BoxAlert from "../components/BoxAlert";
 
 export default function LoginScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<UnauthenticateParamList>>();
+
+  const redirectToRegister = () => {
+    navigation.navigate("registerId");
+  };
+
+  // LOGIN HANDLE FORM
+  const [loginForm, setLoginForm] = useState<LoginInput>({
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (field: string, value: string) => {
+    setLoginForm({ ...loginForm, [field]: value.toLowerCase() });
+  };
+
+  // HANDLE LOGIN
+  const handleLogin = async () => {
+    try {
+      console.log(loginForm);
+      const url = process.env.EXPO_PUBLIC_API_URL;
+
+      const response = await axios.post(`${url}/login`, loginForm);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.upperContainer}>
@@ -19,7 +61,11 @@ export default function LoginScreen() {
       <View style={styles.bottomContainer}>
         {/* EMAIL */}
         <Text style={styles.label}>Email</Text>
-        <TextInput style={styles.input} placeholder="your e-mail" />
+        <TextInput
+          style={styles.input}
+          placeholder="your e-mail"
+          onChangeText={(e) => handleInput("email", e)}
+        />
 
         {/* PASSWORD */}
         <Text style={styles.label}>Password</Text>
@@ -27,15 +73,17 @@ export default function LoginScreen() {
           style={styles.input}
           secureTextEntry={true}
           placeholder="your password"
+          onChangeText={(e) => handleInput("password", e)}
+          onSubmitEditing={handleLogin}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
 
         <View style={styles.subTitle}>
           <Text style={styles.subTitleText}>Don't have an account yet? </Text>
-          <Pressable>
+          <Pressable onPress={redirectToRegister}>
             <Text style={styles.pressableText}>Register here</Text>
           </Pressable>
         </View>
