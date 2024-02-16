@@ -1,10 +1,9 @@
 const express = require("express")
-const { createMilk, getMilk } = require("../controllers/MilkController")
-const authentication = require("../middlewares/authentication")
+const { createMilk, getMilk, deleteMilk } = require("../controllers/MilkController")
 const router = express.Router()
 
-router.use(authentication)
 router.post("/", createMilk)
 router.get("/", getMilk)
+router.delete("/:id", deleteMilk)
 
 module.exports = router
