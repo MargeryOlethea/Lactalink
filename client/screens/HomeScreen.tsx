@@ -2,7 +2,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import Logo from "../components/Logo";
 import { Dropdown } from "react-native-element-dropdown";
 import { useEffect, useState } from "react";
-import { LocationFetchResponse } from "../types/all.types";
+import { HomeProps, LocationFetchResponse } from "../types/all.types";
 import axios from "axios";
 import PostCard from "../components/PostCard";
 import { AntDesign } from "@expo/vector-icons";

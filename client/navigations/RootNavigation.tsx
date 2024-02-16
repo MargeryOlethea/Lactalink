@@ -4,13 +4,13 @@ import ChatListScreen from "../screens/ChatListScreen";
 import CreateMilkScreen from "../screens/CreateMilkScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ComponentProps } from "react";
+import HomeChatStackNavigation from "./HomeChatStackNavigation";
+import { RootNavigationParamList } from "../types/all.types";
+import ChatListNavigationStack from "./ChatListStackNavigation";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootNavigationParamList>();
 
 export default function RootNavigation() {
-  const logoutFunction = () => {
-    console.log("hehe");
-  };
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -37,15 +37,19 @@ export default function RootNavigation() {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeChatStackNavigation}
         options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Create"
         component={CreateMilkScreen}
-        options={{ title: "Create New Post" }}
+        options={{ title: "Create Post" }}
       />
-      <Tab.Screen name="Chats" component={ChatListScreen} />
+      <Tab.Screen
+        name="Chats"
+        component={ChatListNavigationStack}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }

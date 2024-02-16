@@ -1,7 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { HomeNavigationParamList } from "../types/all.types";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 function PostCard() {
+  // HANDLE PINDAH KE CHATROOM
+  const navigation =
+    useNavigation<NativeStackNavigationProp<HomeNavigationParamList>>();
+
+  const moveToChatRoom = () => {
+    navigation.navigate("Chat", { roomId: "2" });
+  };
+
   return (
     <>
       {/* CARD START */}
@@ -35,7 +46,7 @@ function PostCard() {
             Pumped on: 2023-02-07
           </Text>
           <View style={{ alignItems: "flex-end" }}>
-            <Pressable style={styles.chatButton}>
+            <Pressable onPress={moveToChatRoom} style={styles.chatButton}>
               <Text style={styles.buttonText}>Chat</Text>
             </Pressable>
           </View>
