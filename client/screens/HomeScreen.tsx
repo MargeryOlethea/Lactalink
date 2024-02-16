@@ -10,8 +10,65 @@ import { AntDesign } from "@expo/vector-icons";
 import { LoginContext } from "../contexts/LoginContext";
 import BoxAlert from "../components/BoxAlert";
 import * as SecureStore from "expo-secure-store";
+import sliceStringToPairs from "../helpers/sliceLocation";
+import Loading from "../components/Loading";
 
 export default function HomeScreen() {
+  // GET NAME FOR HEADER
+  const [name, setName] = useState<string>("");
+  const fetchName = async () => {
+    try {
+      const loggedName = await SecureStore.getItemAsync("userName");
+      if (loggedName) {
+        const splittedName = loggedName.split(" ");
+        setName(splittedName[0]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // GET ROLE FOR HEADER
+  const [role, setRole] = useState<string>("");
+  const fetchRole = async () => {
+    try {
+      const loggedRole = await SecureStore.getItemAsync("userRole");
+      if (loggedRole) {
+        setRole(loggedRole);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // GET LOCATION FOR FILTER
+  const [province, setProvince] = useState<string>("");
+  const fetchLocation = async () => {
+    try {
+      const loggedLocation = await SecureStore.getItemAsync("userLocation");
+      if (loggedLocation) {
+        setCity(loggedLocation);
+        const slicedLocation = sliceStringToPairs(loggedLocation);
+        setProvince(slicedLocation[0]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // GET ACCESS TOKEN FOR GET
+  const [token, setToken] = useState<string>("");
+  const fetchToken = async () => {
+    try {
+      const loggedToken = await SecureStore.getItemAsync("token");
+      if (loggedToken) {
+        setToken(loggedToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // HANDLE LOGOUT
   const { setIsLoggedIn } = useContext(LoginContext);
   const handleLogout = async () => {
@@ -31,61 +88,76 @@ export default function HomeScreen() {
   };
 
   // HANDLE CITY
-  const userProvince = "36";
   const [citiesList, setCitiesList] = useState<LocationFetchResponse[]>();
-  const [selectedCity, setSelectedCity] = useState<string>();
+  const [city, setCity] = useState<string>();
   const fetchCity = async () => {
     try {
       const data = await axios.get(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${userProvince}.json`,
+        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${province}.json`,
       );
-
       setCitiesList(data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // FETCH HOME DATA
+  const [loading, setLoading] = useState<boolean>(false);
+  const fetchHomeData = () => {
+    try {
+      setLoading(true);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (userProvince) {
+    fetchLocation();
+    fetchName();
+    fetchRole();
+    fetchToken();
+    if (province) {
       fetchCity();
     }
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.upperContainer}>
         <View>
           <Logo color="white" />
-          <Text style={styles.name}>Hi, Annisa!</Text>
-          <Text style={styles.role}>Role: Donor</Text>
+          <Text style={styles.name}>Hi, {name}!</Text>
+          <Text style={styles.role}>Role: {role}</Text>
         </View>
 
-        {citiesList && (
-          <View style={{ alignItems: "flex-end" }}>
-            {/* LOGOUT */}
-            <Pressable style={styles.logoutButton} onPress={handleLogout}>
-              <AntDesign name="logout" size={18} color="#5e8d91" />
-            </Pressable>
+        <View style={{ alignItems: "flex-end" }}>
+          {/* LOGOUT */}
+          <Pressable style={styles.logoutButton} onPress={handleLogout}>
+            <AntDesign name="logout" size={18} color="#5e8d91" />
+          </Pressable>
 
-            {/* FILTER BY LOCATION */}
-            <Text style={{ color: "white", fontWeight: "600" }}>
-              Filter by Location:
-            </Text>
+          {/* FILTER BY LOCATION */}
+          <Text style={{ color: "white", fontWeight: "600" }}>
+            Filter by Location:
+          </Text>
 
-            <Dropdown
-              style={styles.dropdownInput}
-              data={citiesList}
-              placeholderStyle={{ fontSize: 14, color: "white" }}
-              selectedTextStyle={{ fontSize: 10, color: "white" }}
-              labelField="name"
-              valueField="id"
-              placeholder="City..."
-              onChange={(e) => setSelectedCity(e.id)}
-              value={selectedCity}
-            />
-          </View>
-        )}
+          <Dropdown
+            style={styles.dropdownInput}
+            data={citiesList || []}
+            placeholderStyle={{ fontSize: 14, color: "white" }}
+            selectedTextStyle={{ fontSize: 10, color: "white" }}
+            labelField="name"
+            valueField="id"
+            placeholder="City..."
+            onChange={(e) => setCity(e.id)}
+            value={city}
+          />
+        </View>
       </View>
       <ScrollView>
         <View style={styles.bottomContainer}>

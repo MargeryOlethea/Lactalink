@@ -32,7 +32,7 @@ export type RegisterDetail = {
   soy: boolean;
   seafood: boolean;
   flourOrWheat: boolean;
-  readMeat: boolean;
+  redMeat: boolean;
   spicyFood: boolean;
   caffeine: boolean;
 };

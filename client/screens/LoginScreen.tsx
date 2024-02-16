@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import BoxAlert from "../components/BoxAlert";
 import * as SecureStore from "expo-secure-store";
 import { LoginContext } from "../contexts/LoginContext";
+import Loading from "../components/Loading";
 
 export default function LoginScreen() {
   const navigation =
@@ -41,9 +42,11 @@ export default function LoginScreen() {
 
   // HANDLE LOGIN
   const { setIsLoggedIn } = useContext(LoginContext);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleLogin = async () => {
     try {
+      setLoading(true);
       const url = process.env.EXPO_PUBLIC_API_URL;
       const { data }: { data: { data: LoginResponse } } = await axios.post(
         `${url}/login`,
@@ -71,9 +74,14 @@ export default function LoginScreen() {
         console.log(error.message);
         BoxAlert("Error!", error.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.upperContainer}>
