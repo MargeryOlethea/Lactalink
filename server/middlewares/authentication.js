@@ -3,9 +3,7 @@ const { verifyToken } = require("../utils/jwtoken")
 
 const authentication = async (req, res, next) => {
   try {
-    // console.log(req.headers, "<<<<<< headers di authentication")
-
-    const access_token = req.headers.authorization.split(" ")[1]
+    const access_token = req?.headers?.authorization?.split(" ")[1]
 
     if (!access_token) {
       throw { name: "Unauthorized" }

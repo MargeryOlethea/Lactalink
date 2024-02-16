@@ -1,0 +1,56 @@
+[
+  {
+    "name": "ibu1 d ts",
+    "email": "ibu1@mail.com",
+    "password": "$2a$10$vhZxxgMmWGcsDHWGUA5MSuP/wyk6SP.2Hi1vadQqLbLtdhiIkcpdW",
+    "location": "3674",
+    "phoneNumber": "+6280989901",
+    "role": "donor",
+    "isRegistered": false
+  },
+  {
+    "name": "ibu2 d ts",
+    "email": "ibu2@mail.com",
+    "password": "$2a$10$vhZxxgMmWGcsDHWGUA5MSuP/wyk6SP.2Hi1vadQqLbLtdhiIkcpdW",
+    "location": "3674",
+    "phoneNumber": "+6280989902",
+    "role": "donor",
+    "isRegistered": false
+  },
+  {
+    "name": "ibu3 d t",
+    "email": "ibu3@mail.com",
+    "password": "$2a$10$vhZxxgMmWGcsDHWGUA5MSuP/wyk6SP.2Hi1vadQqLbLtdhiIkcpdW",
+    "location": "3671",
+    "phoneNumber": "+6280989903",
+    "role": "donor",
+    "isRegistered": false
+  },
+  {
+    "name": "ibu4 r ts",
+    "email": "ibu2@mail.com",
+    "password": "$2a$10$vhZxxgMmWGcsDHWGUA5MSuP/wyk6SP.2Hi1vadQqLbLtdhiIkcpdW",
+    "location": "3674",
+    "phoneNumber": "+6280989904",
+    "role": "receiver",
+    "isRegistered": false
+  },
+  {
+    "name": "bapak1 r ts",
+    "email": "bapak1@mail.com",
+    "password": "$2a$10$vhZxxgMmWGcsDHWGUA5MSuP/wyk6SP.2Hi1vadQqLbLtdhiIkcpdW",
+    "location": "3674",
+    "phoneNumber": "+6280989951",
+    "role": "receiver",
+    "isRegistered": false
+  },
+  {
+    "name": "bapak2 r ts",
+    "email": "bapak2@mail.com",
+    "password": "$2a$10$vhZxxgMmWGcsDHWGUA5MSuP/wyk6SP.2Hi1vadQqLbLtdhiIkcpdW",
+    "location": "3674",
+    "phoneNumber": "+6280989952",
+    "role": "receiver",
+    "isRegistered": false
+  }
+]

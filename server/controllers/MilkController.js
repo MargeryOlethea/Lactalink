@@ -19,21 +19,21 @@ class MilkController {
 
   static async getMilk(req, res, next) {
     /*
-gender				+ 2 poin
-rhesus				+ 5 poin
-golongan darah 			+ 2 poin
-halal/non halal 			+ 5 poin
-Telur 					+ 2 poin
-Susu sapi (dan turunannya) 	+ 2 poin
-Kacang-kacangan 			+ 2 poin
-Kedelai 				+ 2 poin
-Seafood 				+ 2 poin
-Tepung 				+ 2 poin
-Daging merah 			+ 2 poin
-Makanan pedas 			+ 2 poin
-Kafein				 	+ 2 poin
-
-TOTAL: 	32 poin,
+    gender				+ 2 poin
+    rhesus				+ 5 poin
+    golongan darah 			+ 2 poin
+    halal/non halal 			+ 5 poin
+    Telur 					+ 2 poin
+    Susu sapi (dan turunannya) 	+ 2 poin
+    Kacang-kacangan 			+ 2 poin
+    Kedelai 				+ 2 poin
+    Seafood 				+ 2 poin
+    Tepung 				+ 2 poin
+    Daging merah 			+ 2 poin
+    Makanan pedas 			+ 2 poin
+    Kafein				 	+ 2 poin
+    
+    TOTAL: 	32 poin,
     */
     try {
       const agg = [
@@ -62,17 +62,17 @@ TOTAL: 	32 poin,
         }, {
           '$project': {
             'user.password': 0
+          },
+        }, {
+          '$match': {
+            'user.location': req.loginInfo.location
           }
         }
       ];
 
-      const milks = await Milk.aggregate(agg)
+      const milks = await Milk.aggregate(agg).sort({ createdAt: -1 })
 
       const userLoginDetail = await UserDetail.findOne({ UserId: req.loginInfo.userId })
-
-      // console.log(milks)
-
-      // console.log(userLoginDetail)
 
       const milksWithCompability = milks.map(milk => {
         let score = 0
@@ -120,8 +120,6 @@ TOTAL: 	32 poin,
         return { ...milk, score }
       })
 
-      // console.log(milksWithCompability)
-
       res.status(200).json({
         message: "Successfully get milks",
         data: milksWithCompability
@@ -131,7 +129,6 @@ TOTAL: 	32 poin,
     }
   }
 
-  static async
 }
 
 module.exports = MilkController

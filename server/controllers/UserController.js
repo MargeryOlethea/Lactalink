@@ -17,6 +17,14 @@ class UserController {
     }
   }
 
+  static async ktpRegister(req, res, next) {
+    try {
+
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async register(req, res, next) {
     try {
       const body = {
@@ -68,10 +76,10 @@ class UserController {
 
   static async createUserDetail(req, res, next) {
     try {
-      const { babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, readMeat, spicyFood, caffeine } = req.body
+      const { babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine } = req.body
       const body = {
         UserId: req.loginInfo.userId,
-        babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, readMeat, spicyFood, caffeine
+        babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine
       }
 
       const createdUserDetail = await UserDetail.create(body)

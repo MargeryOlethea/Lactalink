@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
   flourOrWheat: {
     type: Boolean,
   },
-  readMeat: {
+  redMeat: {
     type: Boolean,
   },
   spicyFood: {
