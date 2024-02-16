@@ -31,7 +31,7 @@ export default function RootNavigation() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#5e8d91",
+        tabBarActiveTintColor: "#8CB9BD",
         tabBarInactiveTintColor: "gray",
       })}
     >
