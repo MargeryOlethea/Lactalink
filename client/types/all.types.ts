@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Dispatch, SetStateAction } from "react";
 
 // REGISTER USER
 export type RegisterUser = {
@@ -75,3 +76,9 @@ export type ChatProps = NativeStackScreenProps<
   "ChatList",
   "Chat"
 >;
+
+//LOGIN CONTEXT
+export type LoginContextType = {
+  isLoggedIn: boolean;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+};
