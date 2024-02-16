@@ -9,19 +9,15 @@ import DetailRegisterScreen from "./screens/DetailRegisterScreen";
 import HomeScreen from "./screens/HomeScreen";
 import RootNavigation from "./navigations/RootNavigation";
 import { NavigationContainer } from "@react-navigation/native";
+import { LoginProvider } from "./contexts/LoginContext";
+import StacksHolder from "./navigations/StacksHolder";
 
 export default function App() {
   return (
     <>
-      <NavigationContainer>
-        <RootNavigation />
-
-        {/* DONE */}
-        {/* <IdRegisterScreen /> */}
-        {/* <RegisterScreen /> */}
-        {/* <LoginScreen /> */}
-        {/* <DetailRegisterScreen /> */}
-      </NavigationContainer>
+      <LoginProvider>
+        <StacksHolder />
+      </LoginProvider>
     </>
   );
 }
