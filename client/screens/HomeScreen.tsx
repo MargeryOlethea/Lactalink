@@ -3,8 +3,8 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import Logo from "../components/Logo";
 import { Dropdown } from "react-native-element-dropdown";
 import { useEffect, useState } from "react";
-import { LocationFetchResponse } from "../types/all.types";
-import axios from "axios";
+import { LocationFetchResponse, MilkResponseType } from "../types/all.types";
+import axios, { AxiosError } from "axios";
 import PostCard from "../components/PostCard";
 import { AntDesign } from "@expo/vector-icons";
 import { LoginContext } from "../contexts/LoginContext";
@@ -103,10 +103,29 @@ export default function HomeScreen() {
 
   // FETCH HOME DATA
   const [loading, setLoading] = useState<boolean>(false);
-  const fetchHomeData = () => {
+  const [milkDatas, setMilkDatas] = useState<MilkResponseType[]>([]);
+  const fetchHomeData = async () => {
     try {
       setLoading(true);
+
+      const url = process.env.EXPO_PUBLIC_API_URL;
+      const { data } = await axios.get(`${url}/milks`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data) {
+        setMilkDatas(data.data);
+      }
     } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message || "Something went wrong!");
+      }
     } finally {
       setLoading(false);
     }
@@ -117,6 +136,7 @@ export default function HomeScreen() {
     fetchName();
     fetchRole();
     fetchToken();
+    fetchHomeData();
     if (province) {
       fetchCity();
     }
@@ -162,11 +182,9 @@ export default function HomeScreen() {
       <ScrollView>
         <View style={styles.bottomContainer}>
           {/* CARD */}
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
+          {milkDatas.map((milkData) => (
+            <PostCard key={milkData._id} milkData={milkData} />
+          ))}
         </View>
       </ScrollView>
     </View>

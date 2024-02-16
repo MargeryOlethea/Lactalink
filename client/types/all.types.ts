@@ -19,7 +19,8 @@ export type LocationFetchResponse = {
 };
 
 // REGISTER DETAIL
-export type RegisterDetail = {
+export type UserDetailType = {
+  _id?: string;
   babyName: string;
   babyDOB: string;
   babyGender: string;
@@ -35,6 +36,33 @@ export type RegisterDetail = {
   redMeat: boolean;
   spicyFood: boolean;
   caffeine: boolean;
+  __v?: number;
+};
+
+// USER TYPE
+export type UserType = {
+  _id: string;
+  name: string;
+  email: string;
+  location: string;
+  phoneNumber: string;
+  role: string;
+  isRegistered: boolean;
+};
+
+// MILK TYPE
+export type MilkResponseType = {
+  _id: string;
+  UserId: string;
+  totalBags: number;
+  totalMl: number;
+  pumpDate: string;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+  userdetail: UserDetailType;
+  user: UserType;
+  score: number;
 };
 
 // CREATE NEW MILK POST

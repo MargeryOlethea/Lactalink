@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
-import { RegisterDetail, UnauthenticateParamList } from "../types/all.types";
+import { UserDetailType } from "../types/all.types";
 import Checkbox from "expo-checkbox";
 import {
   bloodrhesusDropdown,
@@ -17,11 +17,10 @@ import {
   genderDropdown,
 } from "../data/dropdownDatas";
 import * as SecureStore from "expo-secure-store";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import Loading from "../components/Loading";
 import axios, { AxiosError } from "axios";
 import BoxAlert from "../components/BoxAlert";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LoginContext } from "../contexts/LoginContext";
 
 export default function DetailRegisterScreen() {
@@ -78,7 +77,7 @@ export default function DetailRegisterScreen() {
   const [formStatement, setFormStatement] = useState<boolean>(false);
 
   //HANDLE FORM
-  const [formRegister, setFormRegister] = useState<RegisterDetail>({
+  const [formRegister, setFormRegister] = useState<UserDetailType>({
     babyName: "",
     babyDOB: "",
     babyGender: "",
