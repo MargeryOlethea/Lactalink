@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb")
 const Milk = require("../models/milk")
 const UserDetail = require("../models/userDetail")
 
@@ -116,13 +117,40 @@ class MilkController {
           score += 2
         }
 
+        const compability = Math.round(score / 32 * 100)
 
-        return { ...milk, score }
+
+        return { ...milk, score: compability }
       })
 
       res.status(200).json({
         message: "Successfully get milks",
         data: milksWithCompability
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async deleteMilk(req, res, next) {
+    try {
+      const { id } = req.params
+
+      const getMilk = await Milk.findOne({ _id: new ObjectId(id) })
+
+      if (!getMilk) {
+        throw { name: "NotFound" }
+      }
+
+      if (getMilk.UserId != req.loginInfo.userId) {
+        throw { name: "Forbidden" }
+      }
+
+      const milk = await Milk.deleteOne({ _id: new ObjectId(id) })
+
+      res.status(200).json({
+        message: "Successfully delete milk",
+        data: milk
       })
     } catch (error) {
       next(error)

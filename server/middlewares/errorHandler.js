@@ -32,6 +32,16 @@ const errorHandler = (error, req, res, next) => {
     message = "Unauthorized"
   }
 
+  if (error.name == "Forbidden") {
+    status = 403
+    message = "Forbidden"
+  }
+
+  if (error.name == "NotFound") {
+    status = 404
+    message = "Data is not found"
+  }
+
   res.status(status).json({ message })
 }
 
