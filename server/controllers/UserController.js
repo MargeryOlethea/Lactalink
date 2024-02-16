@@ -68,7 +68,7 @@ class UserController {
 
       const access_token = createToken(payload)
 
-      res.status(200).json({ message: "Successfully login", access_token })
+      res.status(200).json({ message: "Successfully login", data: { access_token, ...payload } })
     } catch (error) {
       next(error)
     }
