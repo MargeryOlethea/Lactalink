@@ -2,7 +2,10 @@ import React from "react";
 import { createContext, useState } from "react";
 import { LoginContextType } from "../types/all.types";
 
-export const LoginContext = createContext<LoginContextType | null>(null);
+export const LoginContext = createContext<LoginContextType>({
+  isLoggedIn: false,
+  setIsLoggedIn: () => {},
+});
 
 export const LoginProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

@@ -74,11 +74,22 @@ export type UnauthenticateParamList = {
 //LOGIN CONTEXT
 export type LoginContextType = {
   isLoggedIn: boolean;
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 };
 
 // LOGIN FORM
 export type LoginInput = {
   email: string;
   password: string;
+};
+
+//LOGIN RESPONSE
+export type LoginResponse = {
+  access_token: string;
+  email: string;
+  isRegistered: boolean;
+  location: string;
+  name: string;
+  role: string;
+  userId: string;
 };

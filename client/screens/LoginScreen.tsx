@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -8,11 +8,18 @@ import {
   View,
 } from "react-native";
 import Logo from "../components/Logo";
-import { LoginInput, UnauthenticateParamList } from "../types/all.types";
+import {
+  LoginContextType,
+  LoginInput,
+  LoginResponse,
+  UnauthenticateParamList,
+} from "../types/all.types";
 import axios, { AxiosError } from "axios";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import BoxAlert from "../components/BoxAlert";
+import * as SecureStore from "expo-secure-store";
+import { LoginContext } from "../contexts/LoginContext";
 
 export default function LoginScreen() {
   const navigation =
@@ -33,12 +40,27 @@ export default function LoginScreen() {
   };
 
   // HANDLE LOGIN
+  const { setIsLoggedIn } = useContext(LoginContext);
+
   const handleLogin = async () => {
     try {
-      console.log(loginForm);
       const url = process.env.EXPO_PUBLIC_API_URL;
+      const { data }: { data: { data: LoginResponse } } = await axios.post(
+        `${url}/login`,
+        loginForm,
+      );
 
-      const response = await axios.post(`${url}/login`, loginForm);
+      await SecureStore.setItemAsync("token", data.data.access_token);
+      await SecureStore.setItemAsync("userId", data.data.userId);
+      await SecureStore.setItemAsync("userName", data.data.name);
+      await SecureStore.setItemAsync("userLocation", data.data.location);
+      await SecureStore.setItemAsync("userRole", data.data.role);
+
+      if (!data.data.isRegistered) {
+        navigation.navigate("detailRegister");
+      } else {
+        setIsLoggedIn(true);
+      }
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response) {

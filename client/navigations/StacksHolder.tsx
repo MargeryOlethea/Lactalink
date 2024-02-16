@@ -13,8 +13,8 @@ import { UnauthenticateParamList } from "../types/all.types";
 const Stack = createNativeStackNavigator();
 
 const StacksHolder = () => {
-  // const { isLoggedIn } = useContext(LoginContext) || { isLoggedIn: false }
-  const isLoggedIn = false;
+  const { isLoggedIn } = useContext(LoginContext) || { isLoggedIn: false };
+  // const isLoggedIn = false;
   return (
     <>
       <NavigationContainer>

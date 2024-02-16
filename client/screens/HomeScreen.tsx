@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import Logo from "../components/Logo";
 import { Dropdown } from "react-native-element-dropdown";
@@ -7,8 +7,29 @@ import { LocationFetchResponse } from "../types/all.types";
 import axios from "axios";
 import PostCard from "../components/PostCard";
 import { AntDesign } from "@expo/vector-icons";
+import { LoginContext } from "../contexts/LoginContext";
+import BoxAlert from "../components/BoxAlert";
+import * as SecureStore from "expo-secure-store";
 
 export default function HomeScreen() {
+  // HANDLE LOGOUT
+  const { setIsLoggedIn } = useContext(LoginContext);
+  const handleLogout = async () => {
+    try {
+      await SecureStore.deleteItemAsync("token");
+      await SecureStore.deleteItemAsync("userId");
+      await SecureStore.deleteItemAsync("userName");
+      await SecureStore.deleteItemAsync("userLocation");
+      await SecureStore.deleteItemAsync("userRole");
+
+      setIsLoggedIn(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message), BoxAlert("Error", error.message);
+      }
+    }
+  };
+
   // HANDLE CITY
   const userProvince = "36";
   const [citiesList, setCitiesList] = useState<LocationFetchResponse[]>();
@@ -43,7 +64,7 @@ export default function HomeScreen() {
         {citiesList && (
           <View style={{ alignItems: "flex-end" }}>
             {/* LOGOUT */}
-            <Pressable style={styles.logoutButton}>
+            <Pressable style={styles.logoutButton} onPress={handleLogout}>
               <AntDesign name="logout" size={18} color="#5e8d91" />
             </Pressable>
 

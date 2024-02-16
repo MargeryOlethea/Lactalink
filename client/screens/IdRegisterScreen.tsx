@@ -11,8 +11,15 @@ import Logo from "../components/Logo";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UnauthenticateParamList } from "../types/all.types";
 
-export default function IdRegisterScreen({ navigation }) {
+export default function IdRegisterScreen() {
+  // REDIRECT TO LOGIN
+  const navigation =
+    useNavigation<NativeStackNavigationProp<UnauthenticateParamList>>();
+
   const redirectToLogin = () => {
     navigation.navigate("login");
   };
