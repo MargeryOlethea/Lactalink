@@ -75,11 +75,21 @@ export default function DetailRegisterScreen() {
       <View style={styles.bottomContainer}>
         {/* NAME */}
         <Text style={styles.label}>Baby's Name</Text>
-        <TextInput style={styles.input} placeholder="your baby's name" />
+        <TextInput
+          style={styles.input}
+          placeholder="your baby's name"
+          onChangeText={(e) => handleInput("babyName", e)}
+          value={formRegister.babyName}
+        />
 
         {/* DOB */}
         <Text style={styles.label}>Baby's Date of Birth</Text>
-        <TextInput style={styles.input} placeholder="YYYY-MM-DD" />
+        <TextInput
+          style={styles.input}
+          placeholder="YYYY-MM-DD"
+          onChangeText={(e) => handleInput("babyDOB", e)}
+          value={formRegister.babyDOB}
+        />
 
         {/* GENDER */}
         <Text style={styles.label}>Baby's Gender</Text>

@@ -1,6 +1,8 @@
 import React from "react";
 import {
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -73,6 +75,7 @@ export default function ChatRoomScreen() {
       />
 
       {/* TEXT INPUT */}
+
       <View style={styles.textContainer}>
         <TextInput
           style={styles.textInput}
