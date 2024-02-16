@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import {
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -36,6 +35,8 @@ export default function CreateMilkScreen() {
             style={styles.input}
             placeholder="ex: 10 bags"
             keyboardType="numeric"
+            onChangeText={(e) => handleInput("totalBag", e)}
+            value={milkForm.totalBag}
           />
 
           {/* SIZE */}
@@ -44,11 +45,18 @@ export default function CreateMilkScreen() {
             style={styles.input}
             placeholder="ex: 200 ml"
             keyboardType="numeric"
+            onChangeText={(e) => handleInput("totalMl", e)}
+            value={milkForm.totalMl}
           />
 
           {/* PUMP DATE */}
           <Text style={styles.label}>Pump Date</Text>
-          <TextInput style={styles.input} placeholder="YYYY-MM-DD" />
+          <TextInput
+            style={styles.input}
+            placeholder="YYYY-MM-DD"
+            onChangeText={(e) => handleInput("pumpDate", e)}
+            value={milkForm.pumpDate}
+          />
 
           {/* BUTTON */}
           <TouchableOpacity style={styles.button}>

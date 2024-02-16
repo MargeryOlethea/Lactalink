@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   bottomContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
+    padding: 20,
+    paddingBottom: 10,
   },
   name: {
     fontWeight: "800",
