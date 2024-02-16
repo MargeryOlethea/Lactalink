@@ -1,3 +1,5 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 // REGISTER USER
 export type RegisterUser = {
   name: string;
@@ -40,3 +42,36 @@ export type MilkForm = {
   totalMl: string;
   pumpDate: string;
 };
+
+// ROOT NAVIGATION
+export type RootNavigationParamList = {
+  Home: undefined;
+  Create: undefined;
+  Chats: undefined;
+};
+
+// HOME NAVIGATION STACK
+export type HomeNavigationParamList = {
+  HomeScreen: undefined;
+  Chat: { roomId: string };
+};
+
+// HOME PROPS
+export type HomeProps = NativeStackScreenProps<
+  HomeNavigationParamList,
+  "HomeScreen",
+  "Chat"
+>;
+
+// CHAT NAVIGATION STACK
+export type ChatNavigationParamList = {
+  ChatList: undefined;
+  Chat: { roomId: string };
+};
+
+// CHAT PROPS
+export type ChatProps = NativeStackScreenProps<
+  ChatNavigationParamList,
+  "ChatList",
+  "Chat"
+>;
