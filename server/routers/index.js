@@ -15,6 +15,7 @@ router.post("/registration", register)
 router.post("/login", login)
 
 router.use(authentication)
+
 router.use("/users", users)
 router.use("/milks", milks)
 router.use("/chatrooms", chatrooms)
