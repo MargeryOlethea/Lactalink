@@ -7,6 +7,9 @@ class MilkController {
   static async createMilk(req, res, next) {
     try {
       const { totalBags, totalMl, pumpDate } = req.body
+
+      // pumpDate >> yyyy-mm-dd
+
       const newMilk = await Milk.create({ totalBags, totalMl, pumpDate, UserId: req.loginInfo.userId })
 
       res.status(201).json({
@@ -38,6 +41,7 @@ class MilkController {
     */
     try {
       const { location } = req.query
+      const { compability } = req.query
 
       const agg = [
         {
@@ -109,7 +113,7 @@ class MilkController {
         if (milk.userdetail.flourOrWheat == userLoginDetail.flourOrWheat) {
           score += 2
         }
-        if (milk.userdetail.readMeat == userLoginDetail.readMeat) {
+        if (milk.userdetail.redMeat == userLoginDetail.redMeat) {
           score += 2
         }
         if (milk.userdetail.spicyFood == userLoginDetail.spicyFood) {
@@ -119,11 +123,23 @@ class MilkController {
           score += 2
         }
 
-        const compability = Math.round(score / 32 * 100)
+        const percentage = Math.round(score / 32 * 100)
 
 
-        return { ...milk, score: compability }
+        return { ...milk, score: percentage }
       })
+
+      if (compability) {
+        if (compability === "desc") {
+          milksWithCompability.sort((a, b) => {
+            return b.score - a.score
+          })
+        } else if (compability === "asc") {
+          milksWithCompability.sort((a, b) => {
+            return a.score - b.score
+          })
+        }
+      }
 
       res.status(200).json({
         message: "Successfully get milks",
@@ -148,11 +164,11 @@ class MilkController {
         throw { name: "Forbidden" }
       }
 
-      const milk = await Milk.deleteOne({ _id: new ObjectId(id) })
+      const deletedMilk = await Milk.deleteOne({ _id: new ObjectId(id) })
 
       res.status(200).json({
         message: "Successfully delete milk",
-        data: milk
+        data: deletedMilk
       })
     } catch (error) {
       next(error)
