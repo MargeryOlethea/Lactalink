@@ -19,10 +19,13 @@ router.post("/ktp-registration", middlewareUpload, ktpRegister);
 router.post("/registration", register);
 router.post("/login", login);
 
-router.use(authentication);
-router.use("/users", users);
-router.use("/milks", milks);
-router.use("/chatrooms", chatrooms);
-router.use("/chats", chats);
+
+router.use(authentication)
+
+router.use("/users", users)
+router.use("/milks", milks)
+router.use("/chatrooms", chatrooms)
+router.use("/chats", chats)
+
 
 module.exports = router;

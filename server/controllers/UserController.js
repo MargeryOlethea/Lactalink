@@ -3,6 +3,7 @@ const UserDetail = require("../models/userDetail")
 const { ObjectId } = require("mongodb")
 const { hashPassword, comparePassword } = require("../utils/bcrypt")
 const { createToken } = require("../utils/jwtoken")
+const readTextFromImage = require("../utils/gvision")
 
 class UserController {
   // getAllUsers buat coba-coba aja
@@ -19,7 +20,22 @@ class UserController {
 
   static async ktpRegister(req, res, next) {
     try {
+      const idKTP = await readTextFromImage(req.file.buffer)
 
+      let result = null
+      if (idKTP) {
+        result = {
+          idKTP,
+          f4DKTP: idKTP.slice(0, 4), // 1st 4 digit KTP
+          provinceId: idKTP.slice(0, 2), // 1st 2 digit KTP
+          regencyId: idKTP.slice(2, 4), // 2nd 2 digit KTP
+        }
+      }
+
+      res.status(200).json({
+        message: "Successfully read KTP",
+        data: result
+      })
     } catch (error) {
       next(error)
     }
