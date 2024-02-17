@@ -127,7 +127,7 @@ export default function DetailRegisterScreen() {
         }
       } else if (error instanceof Error) {
         console.log(error.message);
-        BoxAlert("Error!", error.message);
+        BoxAlert("Error!", error.message || "Oops! Something went wrong");
       }
     } finally {
       setLoading(false);

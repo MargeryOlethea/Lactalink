@@ -95,7 +95,12 @@ export type ChatNavigationParamList = {
 export type UnauthenticateParamList = {
   login: undefined;
   registerId: undefined;
-  register: { locationId: string | undefined | null };
+  register:
+    | {
+        provinceId: string | null | undefined;
+        cityId: string | null | undefined;
+      }
+    | undefined;
   detailRegister: undefined;
 };
 

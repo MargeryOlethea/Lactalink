@@ -17,3 +17,9 @@ export const bloodrhesusDropdown = [
   { label: "+", value: "+" },
   { label: "-", value: "-" },
 ];
+
+// DROPDOWN ROLE
+export const roleDropdown = [
+  { label: "Receiver", value: "receiver" },
+  { label: "Donor", value: "donor" },
+];

@@ -82,7 +82,8 @@ export default function HomeScreen() {
       setIsLoggedIn(false);
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error.message), BoxAlert("Error", error.message);
+        console.log(error.message),
+          BoxAlert("Error", error.message || "Oops! Something went wrong");
       }
     }
   };
