@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -9,36 +9,75 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
-import { RegisterDetail } from "../types/all.types";
+import { UserDetailType } from "../types/all.types";
 import Checkbox from "expo-checkbox";
+import {
+  bloodrhesusDropdown,
+  bloodtypeDropdown,
+  genderDropdown,
+} from "../data/dropdownDatas";
+import * as SecureStore from "expo-secure-store";
+import { useFocusEffect } from "@react-navigation/native";
+import Loading from "../components/Loading";
+import axios, { AxiosError } from "axios";
+import BoxAlert from "../components/BoxAlert";
+import { LoginContext } from "../contexts/LoginContext";
 
 export default function DetailRegisterScreen() {
-  // DROPDOWN GENDER
-  const genderDropdown = [
-    { label: "Female", value: "female" },
-    { label: "Male", value: "male" },
-  ];
+  // GET NAME FOR HEADER
+  const [name, setName] = useState<string>("");
+  const fetchName = async () => {
+    try {
+      const loggedName = await SecureStore.getItemAsync("userName");
+      if (loggedName) {
+        const splittedName = loggedName.split(" ");
+        setName(splittedName[0]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // DROPDOWN BLOODTYPE
-  const bloodtypeDropdown = [
-    { label: "O", value: "O" },
-    { label: "A", value: "A" },
-    { label: "B", value: "B" },
-    { label: "AB", value: "AB" },
-  ];
+  // GET ROLE FOR HEADER
+  const [role, setRole] = useState<string>("");
+  const fetchRole = async () => {
+    try {
+      const loggedRole = await SecureStore.getItemAsync("userRole");
+      if (loggedRole) {
+        setRole(loggedRole);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // DROPDOWN BLOODRHESUS
-  const bloodrhesusDropdown = [
-    { label: "+", value: "plus" },
-    { label: "-", value: "minus" },
-  ];
+  // GET ACCESS TOKEN FOR POST
+  const [token, setToken] = useState<string>("");
+  const fetchToken = async () => {
+    try {
+      const loggedToken = await SecureStore.getItemAsync("token");
+      if (loggedToken) {
+        setToken(loggedToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchName();
+      fetchRole();
+      fetchToken();
+    }, []),
+  );
 
   // BOTTOM CHECKBOX
   const [formHonesty, setFormHonesty] = useState<boolean>(false);
   const [formStatement, setFormStatement] = useState<boolean>(false);
 
-  //HANDLE REGISTER
-  const [formRegister, setFormRegister] = useState<RegisterDetail>({
+  //HANDLE FORM
+  const [formRegister, setFormRegister] = useState<UserDetailType>({
     babyName: "",
     babyDOB: "",
     babyGender: "",
@@ -51,7 +90,7 @@ export default function DetailRegisterScreen() {
     soy: false,
     seafood: false,
     flourOrWheat: false,
-    readMeat: false,
+    redMeat: false,
     spicyFood: false,
     caffeine: false,
   });
@@ -59,11 +98,55 @@ export default function DetailRegisterScreen() {
   const handleInput = (field: string, value: string | boolean): void => {
     setFormRegister({ ...formRegister, [field]: value });
   };
+
+  // HANDLE REGISTER
+  const [loading, setLoading] = useState<boolean>(false);
+  const { setIsLoggedIn } = useContext(LoginContext);
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const url = process.env.EXPO_PUBLIC_API_URL;
+      await axios.post(`${url}/users/detail`, formRegister, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (role === "donor" && !formStatement) {
+        BoxAlert("Error!", "Please check the required field!");
+      } else if (!formHonesty) {
+        BoxAlert("Error!", "Please check the required field!");
+      } else {
+        setIsLoggedIn(true);
+        BoxAlert("Success!", "Successfully created your data!");
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <ScrollView>
       <View style={styles.upperContainer}>
-        <Text style={styles.name}>Hi, Annisa!</Text>
-        <Text style={styles.role}>Role: Donor</Text>
+        {name && role && (
+          <>
+            <Text style={styles.name}>Hi, {name}!</Text>
+            <Text style={styles.role}>Role: {role}</Text>
+          </>
+        )}
+
         <Text style={styles.mainText}>
           Let's get started! Help us know you better.
         </Text>
@@ -101,7 +184,7 @@ export default function DetailRegisterScreen() {
           labelField="label"
           valueField="value"
           placeholder="your baby's gender"
-          onChange={(gender) => handleInput("gender", gender.value)}
+          onChange={(gender) => handleInput("babyGender", gender.value)}
           value={formRegister.babyGender}
         />
 
@@ -115,7 +198,7 @@ export default function DetailRegisterScreen() {
           labelField="label"
           valueField="value"
           placeholder="your blood type"
-          onChange={(bloodtype) => handleInput("bloodtype", bloodtype.value)}
+          onChange={(bloodtype) => handleInput("bloodType", bloodtype.value)}
           value={formRegister.bloodType}
         />
 
@@ -130,14 +213,16 @@ export default function DetailRegisterScreen() {
           valueField="value"
           placeholder="your blood rhesus"
           onChange={(bloodrhesus) =>
-            handleInput("bloodrhesus", bloodrhesus.value)
+            handleInput("bloodRhesus", bloodrhesus.value)
           }
           value={formRegister.bloodRhesus}
         />
 
         {/* FOOD CHECKBOXES */}
         <Text style={styles.label}>
-          I DO consume / my baby is NOT allergic to:
+          {role && role === "donor"
+            ? "I DO consume:"
+            : "My baby is NOT allergic to:"}
         </Text>
         {/* HALAL */}
         <View style={styles.checkboxContainer}>
@@ -231,13 +316,13 @@ export default function DetailRegisterScreen() {
         {/* RED MEAT */}
         <View style={styles.checkboxContainer}>
           <Checkbox
-            value={formRegister.readMeat}
+            value={formRegister.redMeat}
             onValueChange={(e) => {
               handleInput("redMeat", e);
             }}
             style={styles.checkbox}
           />
-          <Text style={styles.checkboxText}>Read Meat</Text>
+          <Text style={styles.checkboxText}>Red Meat</Text>
         </View>
 
         {/* SPICY FOOD */}
@@ -277,35 +362,37 @@ export default function DetailRegisterScreen() {
             </Text>
           </View>
 
-          <View style={styles.agreementContainer}>
-            <Checkbox
-              value={formStatement}
-              onValueChange={setFormStatement}
-              style={styles.checkbox}
-            />
-            <View>
-              <Text style={styles.checkboxText}>
-                By checking this box, I declare that:
-              </Text>
+          {role === "donor" && (
+            <View style={styles.agreementContainer}>
+              <Checkbox
+                value={formStatement}
+                onValueChange={setFormStatement}
+                style={styles.checkbox}
+              />
+              <View>
+                <Text style={styles.checkboxText}>
+                  By checking this box, I declare that:
+                </Text>
 
-              <Text style={styles.forbiddenText}>• I am a non-smoker.</Text>
-              <Text style={styles.forbiddenText}>
-                • I am not currently taking any medications that are harmful to
-                breastfeeding.
-              </Text>
-              <Text style={styles.forbiddenText}>
-                • I do not have any communicable diseases, such as HIV/AIDS or
-                Hepatitis B/C.
-              </Text>
-              <Text style={styles.forbiddenText}>
-                • I lead a healthy lifestyle.
-              </Text>
+                <Text style={styles.forbiddenText}>• I am a non-smoker.</Text>
+                <Text style={styles.forbiddenText}>
+                  • I am not currently taking any medications that are harmful
+                  to breastfeeding.
+                </Text>
+                <Text style={styles.forbiddenText}>
+                  • I do not have any communicable diseases, such as HIV/AIDS or
+                  Hepatitis B/C.
+                </Text>
+                <Text style={styles.forbiddenText}>
+                  • I lead a healthy lifestyle.
+                </Text>
+              </View>
             </View>
-          </View>
+          )}
         </View>
 
         {/* BUTTON */}
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit My Data</Text>
         </TouchableOpacity>
       </View>

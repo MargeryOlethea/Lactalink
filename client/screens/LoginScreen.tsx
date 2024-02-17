@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -8,8 +8,86 @@ import {
   View,
 } from "react-native";
 import Logo from "../components/Logo";
+import {
+  LoginContextType,
+  LoginInput,
+  LoginResponse,
+  UnauthenticateParamList,
+} from "../types/all.types";
+import axios, { AxiosError } from "axios";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import BoxAlert from "../components/BoxAlert";
+import * as SecureStore from "expo-secure-store";
+import { LoginContext } from "../contexts/LoginContext";
+import Loading from "../components/Loading";
 
 export default function LoginScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<UnauthenticateParamList>>();
+
+  const redirectToRegister = () => {
+    navigation.navigate("registerId");
+  };
+
+  // LOGIN HANDLE FORM
+  const [loginForm, setLoginForm] = useState<LoginInput>({
+    email: "",
+    password: "",
+  });
+
+  const handleInput = (field: string, value: string) => {
+    setLoginForm({ ...loginForm, [field]: value.toLowerCase() });
+  };
+
+  // HANDLE LOGIN
+  const { setIsLoggedIn, setIsDonor } = useContext(LoginContext);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const url = process.env.EXPO_PUBLIC_API_URL;
+      const { data }: { data: { data: LoginResponse } } = await axios.post(
+        `${url}/login`,
+        loginForm,
+      );
+
+      await SecureStore.setItemAsync("token", data.data.access_token);
+      await SecureStore.setItemAsync("userId", data.data.userId);
+      await SecureStore.setItemAsync("userName", data.data.name);
+      await SecureStore.setItemAsync("userLocation", data.data.location);
+      await SecureStore.setItemAsync("userRole", data.data.role);
+
+      if (!data.data.isRegistered) {
+        navigation.navigate("detailRegister");
+      } else {
+        setIsLoggedIn(true);
+        if (data.data.role == "donor") {
+          setIsDonor(true);
+        }
+        if (data.data.role == "receiver") {
+          setIsDonor(false);
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.upperContainer}>
@@ -19,7 +97,11 @@ export default function LoginScreen() {
       <View style={styles.bottomContainer}>
         {/* EMAIL */}
         <Text style={styles.label}>Email</Text>
-        <TextInput style={styles.input} placeholder="your e-mail" />
+        <TextInput
+          style={styles.input}
+          placeholder="your e-mail"
+          onChangeText={(e) => handleInput("email", e)}
+        />
 
         {/* PASSWORD */}
         <Text style={styles.label}>Password</Text>
@@ -27,15 +109,17 @@ export default function LoginScreen() {
           style={styles.input}
           secureTextEntry={true}
           placeholder="your password"
+          onChangeText={(e) => handleInput("password", e)}
+          onSubmitEditing={handleLogin}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
 
         <View style={styles.subTitle}>
           <Text style={styles.subTitleText}>Don't have an account yet? </Text>
-          <Pressable>
+          <Pressable onPress={redirectToRegister}>
             <Text style={styles.pressableText}>Register here</Text>
           </Pressable>
         </View>

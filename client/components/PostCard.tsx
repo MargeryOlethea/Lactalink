@@ -1,13 +1,13 @@
 import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { HomeNavigationParamList } from "../types/all.types";
+import { HomeNavigationParamList, MilkResponseType } from "../types/all.types";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-function PostCard() {
+function PostCard({ milkData }: { milkData: MilkResponseType }) {
   // HANDLE PINDAH KE CHATROOM
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeNavigationParamList>>();
@@ -26,30 +26,36 @@ function PostCard() {
         <View style={styles.compatibilityCircle}>
           <Text style={{ color: "white", fontWeight: "500" }}>Match:</Text>
           <Text style={{ color: "white", fontWeight: "800", fontSize: 25 }}>
-            85%
+            {`${milkData.score}%`}
           </Text>
         </View>
         <View>
           <View style={styles.textFlex}>
-            <Text style={styles.cardName}>Ariana</Text>
-            <Text>
-              <FontAwesome6 name="location-dot" size={14} color="black" />{" "}
-              Tangerang
-            </Text>
+            <Text style={styles.cardName}>{milkData.user.name}</Text>
           </View>
-          <Text style={{ fontWeight: "600", color: "green" }}>Halal</Text>
+          {milkData.userdetail.halal ? (
+            <Text style={{ fontWeight: "600", color: "green" }}>Halal</Text>
+          ) : (
+            <Text style={{ fontWeight: "600", color: "red" }}>Non Halal</Text>
+          )}
 
           <View style={styles.textFlex}>
             <Text>
-              Blood: <Text style={{ fontWeight: "800" }}>B</Text>
+              Blood:{" "}
+              <Text style={{ fontWeight: "800" }}>
+                {milkData.userdetail.bloodType}
+              </Text>
             </Text>
             <Text>
-              Rhesus: <Text style={{ fontWeight: "800" }}>+</Text>
+              Rhesus:{" "}
+              <Text style={{ fontWeight: "800" }}>
+                {milkData.userdetail.bloodRhesus}
+              </Text>
             </Text>
           </View>
 
           <Text style={{ color: "gray", fontStyle: "italic" }}>
-            Pumped on: 2023-02-07
+            Pumped on: {milkData.pumpDate.split("T")[0]}
           </Text>
           <View
             style={{ justifyContent: "flex-end", flexDirection: "row", gap: 5 }}
@@ -81,7 +87,7 @@ function PostCard() {
                   gap: 5,
                 }}
               >
-                <Text style={styles.cardName}>Ariana</Text>
+                <Text style={styles.cardName}>{milkData.user.name}</Text>
                 <Pressable
                   onPress={() => setShowDetail(false)}
                   style={styles.chatButton}
@@ -95,19 +101,27 @@ function PostCard() {
                 <View>
                   <Text>
                     Baby Gender:{" "}
-                    <Text style={{ fontWeight: "800" }}>Female</Text>
+                    <Text style={{ fontWeight: "800" }}>
+                      {milkData.userdetail.babyGender}
+                    </Text>
                   </Text>
                   <Text>
                     Baby DOB:{" "}
-                    <Text style={{ fontWeight: "800" }}>2023-12-12</Text>
+                    <Text style={{ fontWeight: "800" }}>
+                      {milkData.userdetail.babyDOB.split("T")[0]}
+                    </Text>
                   </Text>
                   <Text>
                     Mom's Blood Type:{" "}
-                    <Text style={{ fontWeight: "800" }}>B</Text>
+                    <Text style={{ fontWeight: "800" }}>
+                      {milkData.userdetail.bloodType}
+                    </Text>
                   </Text>
                   <Text>
                     Mom's Blood Rhesus:{" "}
-                    <Text style={{ fontWeight: "800" }}>+</Text>
+                    <Text style={{ fontWeight: "800" }}>
+                      {milkData.userdetail.bloodRhesus}
+                    </Text>
                   </Text>
                 </View>
 
@@ -115,37 +129,84 @@ function PostCard() {
                 <View>
                   <Text style={{ fontWeight: "800" }}>Mom's diet:</Text>
                   <Text>
-                    <FontAwesome name="check" size={14} color="green" /> Halal
+                    {milkData.userdetail.halal ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}
+                    Halal
                   </Text>
                   <Text>
-                    <FontAwesome name="check" size={14} color="green" /> Egg
+                    {milkData.userdetail.egg ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Egg
                   </Text>
                   <Text>
-                    <FontAwesome name="check" size={14} color="green" /> Dairy
+                    {milkData.userdetail.dairy ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Dairy
                   </Text>
                   <Text>
-                    <FontAwesome name="remove" size={14} color="red" /> Nuts
+                    {milkData.userdetail.nuts ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Nuts
                   </Text>
                   <Text>
-                    <FontAwesome name="check" size={14} color="green" /> Soy
+                    {milkData.userdetail.soy ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Soy
                   </Text>
                   <Text>
-                    <FontAwesome name="check" size={14} color="green" /> Seafood
+                    {milkData.userdetail.seafood ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Seafood
                   </Text>
                   <Text>
-                    <FontAwesome name="check" size={14} color="green" /> Flour
-                    or Wheat
+                    {milkData.userdetail.flourOrWheat ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Flour or Wheat
                   </Text>
                   <Text>
-                    <FontAwesome name="check" size={14} color="green" /> Red
-                    Meat
+                    {milkData.userdetail.redMeat ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Red Meat
                   </Text>
                   <Text>
-                    <FontAwesome name="remove" size={14} color="red" /> Spicy
-                    Food
+                    {milkData.userdetail.spicyFood ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Spicy Food
                   </Text>
                   <Text>
-                    <FontAwesome name="remove" size={14} color="red" /> Caffeine
+                    {milkData.userdetail.caffeine ? (
+                      <FontAwesome name="check" size={14} color="green" />
+                    ) : (
+                      <FontAwesome name="remove" size={14} color="red" />
+                    )}{" "}
+                    Caffeine
                   </Text>
                 </View>
 
@@ -154,11 +215,11 @@ function PostCard() {
                   <Text style={styles.disclaimer}>*Details:</Text>
                   <Text style={styles.disclaimer}>
                     <FontAwesome name="check" size={12} color="green" /> What
-                    mom does consume
+                    donor mom does consume
                   </Text>
                   <Text style={styles.disclaimer}>
-                    <FontAwesome name="remove" size={12} color="red" /> What mom
-                    doesn't consume
+                    <FontAwesome name="remove" size={12} color="red" /> What
+                    donor mom does not consume
                   </Text>
                 </View>
               </View>
