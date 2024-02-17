@@ -103,6 +103,8 @@ export type UnauthenticateParamList = {
 export type LoginContextType = {
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  isDonor: boolean;
+  setIsDonor: (isDonor: boolean) => void;
 };
 
 // LOGIN FORM

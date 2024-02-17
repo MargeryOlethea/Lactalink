@@ -32,10 +32,6 @@ function PostCard({ milkData }: { milkData: MilkResponseType }) {
         <View>
           <View style={styles.textFlex}>
             <Text style={styles.cardName}>{milkData.user.name}</Text>
-            {/* <Text>
-              <FontAwesome6 name="location-dot" size={14} color="black" />{" "}
-              Tangerang
-            </Text> */}
           </View>
           {milkData.userdetail.halal ? (
             <Text style={{ fontWeight: "600", color: "green" }}>Halal</Text>

@@ -41,7 +41,7 @@ export default function LoginScreen() {
   };
 
   // HANDLE LOGIN
-  const { setIsLoggedIn } = useContext(LoginContext);
+  const { setIsLoggedIn, setIsDonor } = useContext(LoginContext);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleLogin = async () => {
@@ -63,6 +63,12 @@ export default function LoginScreen() {
         navigation.navigate("detailRegister");
       } else {
         setIsLoggedIn(true);
+        if (data.data.role == "donor") {
+          setIsDonor(true);
+        }
+        if (data.data.role == "receiver") {
+          setIsDonor(false);
+        }
       }
     } catch (error) {
       if (error instanceof AxiosError) {

@@ -120,7 +120,7 @@ export default function HomeScreen() {
       if (error instanceof AxiosError) {
         if (error.response) {
           console.log(error.response.data.message);
-          BoxAlert("Error!", error.response.data.message);
+          // BoxAlert("Error!", error.response.data.message);
         }
       } else if (error instanceof Error) {
         console.log(error.message);
@@ -137,10 +137,15 @@ export default function HomeScreen() {
     fetchRole();
     fetchToken();
     fetchHomeData();
-    if (province) {
-      fetchCity();
-    }
   }, []);
+
+  useEffect(() => {
+    fetchCity();
+  }, [province]);
+
+  useEffect(() => {
+    fetchHomeData();
+  }, [city, token]);
 
   if (loading) {
     return <Loading />;
