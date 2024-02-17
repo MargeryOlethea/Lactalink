@@ -37,6 +37,8 @@ class MilkController {
     TOTAL: 	32 poin,
     */
     try {
+      const { location } = req.query
+
       const agg = [
         {
           '$lookup': {
@@ -66,7 +68,7 @@ class MilkController {
           },
         }, {
           '$match': {
-            'user.location': req.loginInfo.location
+            'user.location': location || req.loginInfo.location
           }
         }
       ];
