@@ -128,3 +128,20 @@ export type LoginResponse = {
   role: string;
   userId: string;
 };
+
+// CHAT TYPE
+export type ChatDataType = {
+  [userId: string]: {
+    date: {
+      nanoseconds: number;
+      seconds: number;
+    };
+    userInfo: {
+      userId: string;
+      userName: string;
+    };
+    lastMessage?: {
+      text: string;
+    };
+  };
+};

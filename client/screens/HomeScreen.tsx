@@ -14,6 +14,19 @@ import sliceStringToPairs from "../helpers/sliceLocation";
 import Loading from "../components/Loading";
 
 export default function HomeScreen() {
+  // GET ID FOR CHAT
+  const [userId, setUserId] = useState<string>("");
+  const fetchUserId = async () => {
+    try {
+      const loggedUserId = await SecureStore.getItemAsync("userId");
+      if (loggedUserId) {
+        setUserId(loggedUserId);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // GET NAME FOR HEADER
   const [name, setName] = useState<string>("");
   const fetchName = async () => {
@@ -110,9 +123,12 @@ export default function HomeScreen() {
       setLoading(true);
 
       const url = process.env.EXPO_PUBLIC_API_URL;
-      const { data } = await axios.get(`${url}/milks`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        `${url}/milks?compability=desc&location=${city}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       if (data) {
         setMilkDatas(data.data);
@@ -134,6 +150,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     fetchLocation();
+    fetchUserId();
     fetchName();
     fetchRole();
     fetchToken();
@@ -188,9 +205,26 @@ export default function HomeScreen() {
       <ScrollView>
         <View style={styles.bottomContainer}>
           {/* CARD */}
-          {milkDatas.map((milkData) => (
-            <PostCard key={milkData._id} milkData={milkData} />
-          ))}
+          {milkDatas.length == 0 && (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                marginVertical: "60%",
+              }}
+            >
+              <Text style={{ color: "gray" }}>No post in this area</Text>
+            </View>
+          )}
+          {milkDatas.length > 0 &&
+            milkDatas.map((milkData) => (
+              <PostCard
+                key={milkData._id}
+                milkData={milkData}
+                loggedUserId={userId}
+                loggedUserName={name}
+              />
+            ))}
         </View>
       </ScrollView>
     </View>

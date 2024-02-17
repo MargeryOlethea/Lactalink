@@ -42,7 +42,6 @@ export default function IdRegisterScreen() {
       });
 
       if (!result.canceled) {
-        console.log(result.assets[0]);
         setFileName(result.assets[0].fileName);
         setFileType(result.assets[0].type);
         setImage(result.assets[0].uri);

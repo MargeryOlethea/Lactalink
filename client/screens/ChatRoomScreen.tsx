@@ -1,8 +1,6 @@
 import React from "react";
 import {
   FlatList,
-  KeyboardAvoidingView,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -11,8 +9,12 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../utils/firebase";
 
 export default function ChatRoomScreen() {
+  // SEND MESSAGE
   const [message, setMessage] = useState<string>("");
   const sendMessage = () => {};
 
