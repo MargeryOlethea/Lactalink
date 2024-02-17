@@ -26,6 +26,7 @@ export default function LoginScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<UnauthenticateParamList>>();
 
+  // REDIRECT TO REGISTER
   const redirectToRegister = () => {
     navigation.navigate("registerId");
   };
@@ -78,7 +79,7 @@ export default function LoginScreen() {
         }
       } else if (error instanceof Error) {
         console.log(error.message);
-        BoxAlert("Error!", error.message);
+        BoxAlert("Error!", error.message || "Oops! Something went wrong");
       }
     } finally {
       setLoading(false);

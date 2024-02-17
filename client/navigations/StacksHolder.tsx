@@ -8,7 +8,6 @@ import LoginScreen from "../screens/LoginScreen";
 import IdRegisterScreen from "../screens/IdRegisterScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import DetailRegisterScreen from "../screens/DetailRegisterScreen";
-import { UnauthenticateParamList } from "../types/all.types";
 
 const Stack = createNativeStackNavigator();
 

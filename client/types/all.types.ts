@@ -82,20 +82,25 @@ export type RootNavigationParamList = {
 // HOME NAVIGATION STACK
 export type HomeNavigationParamList = {
   HomeScreen: undefined;
-  Chat: { roomId: string };
+  Chat: { roomId: string } | undefined;
 };
 
 // CHAT NAVIGATION STACK
 export type ChatNavigationParamList = {
   ChatList: undefined;
-  Chat: { roomId: string };
+  Chat: { roomId: string } | undefined;
 };
 
 // REGISTER OR LOGIN STACK
 export type UnauthenticateParamList = {
   login: undefined;
   registerId: undefined;
-  register: { locationId: string | undefined | null };
+  register:
+    | {
+        provinceId: string | null | undefined;
+        cityId: string | null | undefined;
+      }
+    | undefined;
   detailRegister: undefined;
 };
 

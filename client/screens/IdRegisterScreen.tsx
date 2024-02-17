@@ -14,6 +14,9 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { UnauthenticateParamList } from "../types/all.types";
+import axios, { AxiosError } from "axios";
+import BoxAlert from "../components/BoxAlert";
+import Loading from "../components/Loading";
 
 export default function IdRegisterScreen() {
   // REDIRECT TO LOGIN
@@ -25,7 +28,9 @@ export default function IdRegisterScreen() {
   };
 
   // HANDLE UPLOAD
-  const [image, setImage] = useState<string>();
+  const [image, setImage] = useState<string | null | undefined>();
+  const [fileName, setFileName] = useState<string | null | undefined>();
+  const [fileType, setFileType] = useState<string | null | undefined>();
 
   const imagePicker = async () => {
     try {
@@ -37,6 +42,9 @@ export default function IdRegisterScreen() {
       });
 
       if (!result.canceled) {
+        console.log(result.assets[0]);
+        setFileName(result.assets[0].fileName);
+        setFileType(result.assets[0].type);
         setImage(result.assets[0].uri);
       }
     } catch (error) {
@@ -44,27 +52,63 @@ export default function IdRegisterScreen() {
     }
   };
 
+  // UPLOAD IMAGE
+  const [loading, setLoading] = useState<boolean>(false);
   const uploadImage = async () => {
     try {
+      setLoading(true);
       if (!image) {
         alert("No image selected");
         return;
       }
 
       const formData = new FormData();
-      const response = await fetch(image);
-      const blob = await response.blob();
-      formData.append("image", blob, "id-card");
 
-      //await axios post, form data, headers: content type : multipart/formData
+      // INI GA WORKING
+      // const response = await fetch(image);
+      // const blob = await response.blob();
 
-      //navigate
+      // console.log(blob, "ini blobnya");
 
-      //alert successfully upload, now please register
+      // if (fileName) {
+      //   formData.append("file", blob, fileName);
+      // }
+
+      // BISA TAPI KENA TYPESCRIPT
+
+      formData.append("file", { uri: image, type: fileType, name: fileName });
+
+      const url = process.env.EXPO_PUBLIC_API_URL;
+      const { data } = await axios.post(`${url}/ktp-registration`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const { f4DKTP, provinceId } = data.data;
+
+      navigation.navigate("register", { provinceId, cityId: f4DKTP });
+
+      BoxAlert(
+        "Success!",
+        "Successfully upload! Please complete your registration.",
+      );
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message || "Oops! Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>

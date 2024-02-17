@@ -7,7 +7,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-function PostCard({ milkData }: { milkData: MilkResponseType }) {
+function PostCard({
+  milkData,
+  key,
+}: {
+  milkData: MilkResponseType;
+  key: string;
+}) {
   // HANDLE PINDAH KE CHATROOM
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeNavigationParamList>>();
