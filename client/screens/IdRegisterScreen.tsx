@@ -75,6 +75,7 @@ export default function IdRegisterScreen() {
       // }
 
       // BISA TAPI KENA TYPESCRIPT
+
       formData.append("file", { uri: image, type: fileType, name: fileName });
 
       const url = process.env.EXPO_PUBLIC_API_URL;
