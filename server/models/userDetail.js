@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   bloodType: {
-    type: String
+    type: String,
+    required: true
   },
   bloodRhesus: {
     type: String,
@@ -31,30 +32,39 @@ const userSchema = new mongoose.Schema({
   },
   egg: {
     type: Boolean,
+    required: true
   },
   dairy: {
     type: Boolean,
+    required: true
   },
   nuts: {
     type: Boolean,
+    required: true
   },
   soy: {
     type: Boolean,
+    required: true
   },
   seafood: {
     type: Boolean,
+    required: true
   },
   flourOrWheat: {
     type: Boolean,
+    required: true
   },
   redMeat: {
     type: Boolean,
+    required: true
   },
   spicyFood: {
     type: Boolean,
+    required: true
   },
   caffeine: {
     type: Boolean,
+    required: true
   },
 })
 

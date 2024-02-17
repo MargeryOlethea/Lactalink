@@ -14,15 +14,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  profilePicture: {
-    type: String
+  profilePictureUrl: {
+    type: String,
+    default: "https://static.thenounproject.com/png/4530368-200.png"
   },
   location: {
-    type: String
+    type: String,
+    required: true
   },
   phoneNumber: {
     type: String,
-    unique: true
+    unique: true,
+    required: true
   },
   role: {
     type: String,

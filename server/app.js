@@ -4,20 +4,18 @@ if (process.env.NODE_ENV !== "production") {
 
 // CONNECT TO DATABASE
 const mongoose = require("mongoose")
-const router = require("./routers/index");
 
 // untuk menentukan nama database, isi di url paling belakang
-
 // link project
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
 
 // SET UP EXPRESS
+const router = require("./routers/index");
 const express = require("express");
 const cors = require(`cors`);
 const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
-const port = 3000;
 
 app.use(cors());
 
@@ -28,6 +26,9 @@ app.use(express.json());
 app.use(router)
 app.use(errorHandler)
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+// ------- app.listen moved to ./bin/www
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`);
+// });
+
+module.exports = app

@@ -3,8 +3,9 @@ const { getAllUsers, createUserDetail, getUserLoginDetail } = require("../contro
 const router = express.Router()
 
 // buat coba-coba
-
 router.get("/", getAllUsers)
+// ---
+
 router.post("/detail", createUserDetail)
 router.get("/detail", getUserLoginDetail)
 
