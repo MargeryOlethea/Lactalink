@@ -46,7 +46,6 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleLogin = async () => {
-    console.log("coba bang");
     try {
       setLoading(true);
       const url = process.env.EXPO_PUBLIC_API_URL;

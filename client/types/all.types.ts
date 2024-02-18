@@ -145,3 +145,13 @@ export type ChatDataType = {
     };
   };
 };
+
+export type MessagesDataType = {
+  text: string;
+  id: string;
+  senderId: string;
+  date: {
+    nanoseconds: number;
+    seconds: number;
+  };
+}[];

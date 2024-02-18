@@ -3,13 +3,20 @@ type ServerTimestamp = {
   nanoseconds: number;
 };
 
-export function dateConverter(serverTimestamp: ServerTimestamp): Date {
+export function dateConverter(serverTimestamp: ServerTimestamp): Date | null {
+  if (!serverTimestamp) {
+    return null;
+  }
+
   const milliseconds = serverTimestamp.seconds * 1000;
 
   return new Date(milliseconds);
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | null): string | null {
+  if (!date) {
+    return null;
+  }
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");

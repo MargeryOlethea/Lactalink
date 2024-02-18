@@ -8,6 +8,7 @@ import { ChatDataType, ChatNavigationParamList } from "../types/all.types";
 import { FontAwesome } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { dateConverter, formatDate } from "../helpers/dateConverter";
+import Loading from "../components/Loading";
 
 export default function ChatListScreen() {
   // GET ID FOR CHAT
@@ -30,12 +31,20 @@ export default function ChatListScreen() {
 
   // FETCH CHAT
   const [chats, setChats] = useState<ChatDataType | undefined>();
-
+  const [loading, setLoading] = useState<boolean>(false);
   const snapChats = () => {
-    onSnapshot(doc(db, "userChats", userId), (doc) => {
-      setChats(doc.data());
-    });
+    try {
+      setLoading(true);
+      onSnapshot(doc(db, "userChats", userId), (doc) => {
+        setChats(doc.data());
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useFocusEffect(
     React.useCallback(() => {
       if (userId) {
@@ -47,14 +56,17 @@ export default function ChatListScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<ChatNavigationParamList>>();
 
-  const moveToChatRoom = () => {
-    navigation.navigate("Chat", { roomId: "2" });
+  const moveToChatRoom = (roomId: string) => {
+    navigation.navigate("Chat", { roomId });
   };
-  console.log(chats, "ini chats beb");
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <ScrollView>
       <View style={styles.container}>
-        {/* HEHEHE */}
+        {/* IF NO CHATS */}
         {!chats && (
           <>
             <View
@@ -68,12 +80,13 @@ export default function ChatListScreen() {
             </View>
           </>
         )}
-        {/* HEHEHE */}
+
+        {/* CHAT CARDS */}
         {chats &&
           Object.entries(chats).map((chat) => (
             <Pressable
               style={styles.chatHolder}
-              onPress={moveToChatRoom}
+              onPress={() => moveToChatRoom(chat[0])}
               key={chat[0]}
             >
               <FontAwesome name="user-circle" size={60} color="#8CB9BD" />
@@ -87,7 +100,7 @@ export default function ChatListScreen() {
                   {chat[1].lastMessage?.text}
                 </Text>
                 <Text style={styles.timeStamp}>
-                  {formatDate(dateConverter(chat[1].date))}
+                  {formatDate(dateConverter(chat[1].date)) || ""}
                 </Text>
               </View>
             </Pressable>

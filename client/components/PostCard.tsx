@@ -29,19 +29,15 @@ function PostCard({
   // BUAT HANDLE TOMBOL CHAT ADA/GA
   const { isDonor } = useContext(LoginContext);
 
-  // HANDLE PINDAH KE CHATROOM
+  // HANDLE CREATE / PINDAH KE CHATROOM
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeNavigationParamList>>();
 
-  // !!!!!!!!!! DI SINI !!!!!!!!!!!!!!!!!!!!
   const [loading, setLoading] = useState<boolean>(false);
   const moveToChatRoom = async (donorUserId: string, donorName: string) => {
     try {
       setLoading(true);
-      const roomId =
-        loggedUserId > donorUserId
-          ? loggedUserId + donorUserId
-          : donorUserId + loggedUserId;
+      const roomId = `${donorUserId} & ${loggedUserId}`;
 
       const responseChats = await getDoc(doc(db, "chats", roomId));
 
@@ -80,6 +76,7 @@ function PostCard({
         [roomId + ".date"]: serverTimestamp(),
       });
 
+      // NAVIGATE TO ROOM
       navigation.navigate("Chat", { roomId });
     } catch (error) {
       BoxAlert("Error!", "Oops! something is wrong!");
