@@ -67,7 +67,7 @@ export type MilkResponseType = {
 
 // CREATE NEW MILK POST
 export type MilkForm = {
-  totalBag: string;
+  totalBags: string;
   totalMl: string;
   pumpDate: string;
 };
@@ -146,6 +146,7 @@ export type ChatDataType = {
   };
 };
 
+// MESSAGE TYPE
 export type MessagesDataType = {
   text: string;
   id: string;
@@ -155,3 +156,13 @@ export type MessagesDataType = {
     seconds: number;
   };
 }[];
+
+// POST CARD PROPS TYPE
+export type PostCardPropsType = {
+  milkData: MilkResponseType;
+  loggedUserId: string;
+  loggedUserName: string;
+  triggerRefetch: boolean;
+  setTriggerRefetch: (triggerRefetch: boolean) => void;
+  token: string;
+};

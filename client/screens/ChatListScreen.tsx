@@ -83,28 +83,30 @@ export default function ChatListScreen() {
 
         {/* CHAT CARDS */}
         {chats &&
-          Object.entries(chats).map((chat) => (
-            <Pressable
-              style={styles.chatHolder}
-              onPress={() => moveToChatRoom(chat[0])}
-              key={chat[0]}
-            >
-              <FontAwesome name="user-circle" size={60} color="#8CB9BD" />
-              <View>
-                <Text style={styles.name}>{chat[1].userInfo.userName}</Text>
-                <Text
-                  style={styles.chatText}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {chat[1].lastMessage?.text}
-                </Text>
-                <Text style={styles.timeStamp}>
-                  {formatDate(dateConverter(chat[1].date)) || ""}
-                </Text>
-              </View>
-            </Pressable>
-          ))}
+          Object.entries(chats)
+            .sort((a, b) => b[1]?.date?.seconds - a[1]?.date?.seconds)
+            .map((chat) => (
+              <Pressable
+                style={styles.chatHolder}
+                onPress={() => moveToChatRoom(chat[0])}
+                key={chat[0]}
+              >
+                <FontAwesome name="user-circle" size={60} color="#8CB9BD" />
+                <View>
+                  <Text style={styles.name}>{chat[1].userInfo.userName}</Text>
+                  <Text
+                    style={styles.chatText}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {chat[1].lastMessage?.text}
+                  </Text>
+                  <Text style={styles.timeStamp}>
+                    {formatDate(dateConverter(chat[1].date)) || ""}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
       </View>
     </ScrollView>
   );

@@ -148,6 +148,9 @@ export default function HomeScreen() {
     }
   };
 
+  // FOR DELETE
+  const [triggerRefetch, setTriggerRefetch] = useState<boolean>(false);
+
   useEffect(() => {
     fetchLocation();
     fetchUserId();
@@ -159,7 +162,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     fetchCity();
-  }, [province]);
+  }, [province, triggerRefetch]);
 
   useEffect(() => {
     fetchHomeData();
@@ -213,7 +216,12 @@ export default function HomeScreen() {
                 marginVertical: "60%",
               }}
             >
-              <Text style={{ color: "gray" }}>No post in this area</Text>
+              <Text style={{ color: "gray", textAlign: "center" }}>
+                No post in this area yet.
+              </Text>
+              <Text style={{ color: "gray", textAlign: "center" }}>
+                You can explore another area using the location filter above.
+              </Text>
             </View>
           )}
           {milkDatas.length > 0 &&
@@ -223,6 +231,9 @@ export default function HomeScreen() {
                 milkData={milkData}
                 loggedUserId={userId}
                 loggedUserName={name}
+                setTriggerRefetch={setTriggerRefetch}
+                triggerRefetch={triggerRefetch}
+                token={token}
               />
             ))}
         </View>

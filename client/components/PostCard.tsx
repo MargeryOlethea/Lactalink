@@ -1,6 +1,10 @@
 import React, { useContext } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { HomeNavigationParamList, MilkResponseType } from "../types/all.types";
+import {
+  HomeNavigationParamList,
+  MilkResponseType,
+  PostCardPropsType,
+} from "../types/all.types";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
@@ -16,16 +20,16 @@ import { db } from "../utils/firebase";
 import BoxAlert from "./BoxAlert";
 import Loading from "./Loading";
 import { LoginContext } from "../contexts/LoginContext";
+import axios, { AxiosError } from "axios";
 
 function PostCard({
   milkData,
   loggedUserId,
   loggedUserName,
-}: {
-  milkData: MilkResponseType;
-  loggedUserId: string;
-  loggedUserName: string;
-}) {
+  setTriggerRefetch,
+  triggerRefetch,
+  token,
+}: PostCardPropsType) {
   // BUAT HANDLE TOMBOL CHAT ADA/GA
   const { isDonor } = useContext(LoginContext);
 
@@ -81,6 +85,34 @@ function PostCard({
     } catch (error) {
       BoxAlert("Error!", "Oops! something is wrong!");
       console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // DELETE MILK
+  const deleteMilk = async (milkId: string) => {
+    try {
+      setLoading(true);
+      const url = process.env.EXPO_PUBLIC_API_URL;
+      await axios.delete(`${url}/milks/${milkId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setTriggerRefetch(!triggerRefetch);
+
+      BoxAlert("Success!", "Success delete item!");
+    } catch (error) {
+      console.log(error);
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message || "Oops! Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -156,6 +188,14 @@ function PostCard({
                 style={styles.chatButton}
               >
                 <Text style={styles.buttonText}>Chat</Text>
+              </Pressable>
+            )}
+            {isDonor && milkData.user._id == loggedUserId && (
+              <Pressable
+                onPress={() => deleteMilk(milkData._id)}
+                style={[styles.chatButton, { backgroundColor: "#ff6961" }]}
+              >
+                <Text style={styles.buttonText}>Delete</Text>
               </Pressable>
             )}
           </View>
