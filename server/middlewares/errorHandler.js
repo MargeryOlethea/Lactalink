@@ -1,14 +1,16 @@
 
+
 const errorHandler = (error, req, res, next) => {
-  console.log(error, "<<<<< log di errorHandler")
-  let status = 500
-  let message = "Internal Server Error"
+  console.log(error, "<<<<< log di errorHandler");
+  let status = 500;
+  let message = "Internal Server Error";
 
   if (error.name == "ValidationError") {
     Object.keys(error.errors).forEach((key) => {
-      message = error.errors[key].path + " " + error.errors[key].kind
+      message = error.errors[key].path + " " + error.errors[key].kind;
     });
   }
+
 
   if (error.name == "MongoServerError" && error.code == 11000) {
     status = 400
@@ -16,31 +18,31 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error.name == "LoginValidationInput") {
-    status = 401
-    message = "Email/Password is required"
+    status = 401;
+    message = "Email/Password is required";
   }
 
   if (error.name == "LoginValidationError") {
-    status = 401
-    message = "Email/Password is invalid"
+    status = 401;
+    message = "Email/Password is invalid";
   }
 
   if (error.name == "Unauthorized") {
-    status = 403
-    message = "Unauthorized"
+    status = 403;
+    message = "Unauthorized";
   }
 
   if (error.name == "Forbidden") {
-    status = 403
-    message = "Forbidden"
+    status = 403;
+    message = "Forbidden";
   }
 
   if (error.name == "NotFound") {
-    status = 404
-    message = "Data is not found"
+    status = 404;
+    message = "Data is not found";
   }
 
-  res.status(status).json({ message })
-}
+  res.status(status).json({ message });
+};
 
-module.exports = errorHandler
+module.exports = errorHandler;

@@ -5,39 +5,40 @@ const { comparePassword } = require("../utils/bcrypt")
 const { createToken } = require("../utils/jwtoken")
 const readTextFromImage = require("../utils/gvision")
 
+
 class UserController {
   // getAllUsers buat coba-coba aja
   static async getAllUsers(req, res, next) {
     try {
       // cara exclude dari find, dengan menggunakan .select("-field")
-      const data = await User.find().select(["-password", "-location"])
+      const data = await User.find().select(["-password", "-location"]);
 
-      res.status(200).json(data)
+      res.status(200).json(data);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async ktpRegister(req, res, next) {
     try {
-      const idKTP = await readTextFromImage(req.file.buffer)
+      const idKTP = await readTextFromImage(req.file.buffer);
 
-      let result = null
+      let result = null;
       if (idKTP) {
         result = {
           idKTP,
           f4DKTP: idKTP.slice(0, 4), // 1st 4 digit KTP
           provinceId: idKTP.slice(0, 2), // 1st 2 digit KTP
           regencyId: idKTP.slice(2, 4), // 2nd 2 digit KTP
-        }
+        };
       }
 
       res.status(200).json({
         message: "Successfully read KTP",
-        data: result
-      })
+        data: result,
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -50,11 +51,11 @@ class UserController {
         location: req.body.location,
         phoneNumber: req.body.phoneNumber,
         role: req.body.role,
-      }
-      await User.create(body)
-      res.status(201).json({ message: "Successfully register" })
+      };
+      await User.create(body);
+      res.status(201).json({ message: "Successfully register" });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -63,13 +64,14 @@ class UserController {
       const email = req.body.email.toLowerCase()
       const password = req.body.password
 
+
       if (!email || !password) {
-        throw { name: "LoginValidationInput" }
+        throw { name: "LoginValidationInput" };
       }
 
-      const checkUser = await User.findOne({ email })
+      const checkUser = await User.findOne({ email });
       if (!checkUser || !comparePassword(password, checkUser.password)) {
-        throw { name: "LoginValidationError" }
+        throw { name: "LoginValidationError" };
       }
 
       // setup jwt dan payload
@@ -79,35 +81,71 @@ class UserController {
         email: checkUser.email,
         location: checkUser.location,
         role: checkUser.role,
-        isRegistered: checkUser.isRegistered
-      }
+        isRegistered: checkUser.isRegistered,
+      };
 
-      const access_token = createToken(payload)
+      const access_token = createToken(payload);
 
-      res.status(200).json({ message: "Successfully login", data: { access_token, ...payload } })
+      res.status(200).json({
+        message: "Successfully login",
+        data: { access_token, ...payload },
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
   static async createUserDetail(req, res, next) {
     try {
-      const { babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine } = req.body
+      const {
+        babyName,
+        babyDOB,
+        babyGender,
+        bloodType,
+        bloodRhesus,
+        halal,
+        egg,
+        dairy,
+        nuts,
+        soy,
+        seafood,
+        flourOrWheat,
+        redMeat,
+        spicyFood,
+        caffeine,
+      } = req.body;
       const body = {
         UserId: req.loginInfo.userId,
-        babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine
-      }
+        babyName,
+        babyDOB,
+        babyGender,
+        bloodType,
+        bloodRhesus,
+        halal,
+        egg,
+        dairy,
+        nuts,
+        soy,
+        seafood,
+        flourOrWheat,
+        redMeat,
+        spicyFood,
+        caffeine,
+      };
 
-      const createdUserDetail = await UserDetail.create(body)
+      const createdUserDetail = await UserDetail.create(body);
 
-      await User.updateOne({ _id: req.loginInfo.userId }, { isRegistered: true })
+      await User.updateOne(
+        { _id: req.loginInfo.userId },
+        { isRegistered: true },
+      );
 
       res.status(201).json({
         message: "Successfully create user detail",
-        data: createdUserDetail
-      })
+        data: createdUserDetail,
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -136,11 +174,11 @@ class UserController {
         }
       ];
 
-      const userLoginDetail = await UserDetail.aggregate(agg)
+      const userLoginDetail = await UserDetail.aggregate(agg);
 
-      res.status(200).json({ data: userLoginDetail[0] })
+      res.status(200).json({ data: userLoginDetail[0] });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -164,4 +202,4 @@ class UserController {
   }
 }
 
-module.exports = UserController
+module.exports = UserController;
