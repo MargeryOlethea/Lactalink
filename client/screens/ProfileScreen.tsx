@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -21,6 +21,8 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import BoxAlert from "../components/BoxAlert";
 import Loading from "../components/Loading";
+import { LoginContext } from "../contexts/LoginContext";
+import { AntDesign } from "@expo/vector-icons";
 
 function ProfileScreen() {
   // GET ACCESS TOKEN FOR GET
@@ -139,6 +141,25 @@ function ProfileScreen() {
     }
   };
 
+  // HANDLE LOGOUT
+  const { setIsLoggedIn } = useContext(LoginContext);
+  const handleLogout = async () => {
+    try {
+      await SecureStore.deleteItemAsync("token");
+      await SecureStore.deleteItemAsync("userId");
+      await SecureStore.deleteItemAsync("userName");
+      await SecureStore.deleteItemAsync("userLocation");
+      await SecureStore.deleteItemAsync("userRole");
+
+      setIsLoggedIn(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message),
+          BoxAlert("Error", error.message || "Oops! Something went wrong");
+      }
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -149,27 +170,38 @@ function ProfileScreen() {
         <View style={styles.upperContainer}>
           <View>
             <Logo color="white" />
+
             <Text style={styles.name}>Hi, {userData?.user.name}!</Text>
             <Text style={styles.role}>Role: {userData?.user.role}</Text>
           </View>
 
           <View>
-            <Pressable
-              onPress={() => setEditMode(!editMode)}
-              style={
-                editMode ? styles.editButtonActive : styles.editButtonInactive
-              }
+            <View
+              style={{ alignItems: "flex-end", justifyContent: "flex-end" }}
             >
-              <Text
+              {/* LOGOUT */}
+              <Pressable style={styles.logoutButton} onPress={handleLogout}>
+                <AntDesign name="logout" size={18} color="#5e8d91" />
+              </Pressable>
+
+              {/* EDIT */}
+              <Pressable
+                onPress={() => setEditMode(!editMode)}
                 style={
-                  editMode
-                    ? { color: "#8CB9BD", fontWeight: "800" }
-                    : { color: "white", fontWeight: "800" }
+                  editMode ? styles.editButtonActive : styles.editButtonInactive
                 }
               >
-                Edit Profile
-              </Text>
-            </Pressable>
+                <Text
+                  style={
+                    editMode
+                      ? { color: "#8CB9BD", fontWeight: "800" }
+                      : { color: "white", fontWeight: "800" }
+                  }
+                >
+                  Edit Profile
+                </Text>
+              </Pressable>
+            </View>
           </View>
         </View>
 
@@ -517,6 +549,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "600",
     color: "white",
+  },
+  logoutButton: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 20,
+    marginBottom: 45,
   },
 });
 
