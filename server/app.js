@@ -2,12 +2,6 @@ if (process.env.NODE_ENV !== "production") {
   require(`dotenv`).config();
 }
 
-// CONNECT TO DATABASE
-const mongoose = require("mongoose")
-
-// untuk menentukan nama database, isi di url paling belakang
-// link project
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING)
 
 // SET UP EXPRESS
 const router = require("./routers/index");

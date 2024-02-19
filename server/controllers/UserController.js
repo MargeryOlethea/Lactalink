@@ -1,7 +1,7 @@
 const User = require("../models/user")
 const UserDetail = require("../models/userDetail")
 const { ObjectId } = require("mongodb")
-const { hashPassword, comparePassword } = require("../utils/bcrypt")
+const { comparePassword } = require("../utils/bcrypt")
 const { createToken } = require("../utils/jwtoken")
 const readTextFromImage = require("../utils/gvision")
 
@@ -46,7 +46,7 @@ class UserController {
       const body = {
         name: req.body.name,
         email: req.body.email,
-        password: hashPassword(req.body.password),
+        password: req.body.password,
         location: req.body.location,
         phoneNumber: req.body.phoneNumber,
         role: req.body.role,
@@ -60,7 +60,7 @@ class UserController {
 
   static async login(req, res, next) {
     try {
-      const email = req.body.email
+      const email = req.body.email.toLowerCase()
       const password = req.body.password
 
       if (!email || !password) {
