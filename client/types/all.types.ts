@@ -1,6 +1,3 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Dispatch, SetStateAction } from "react";
-
 // REGISTER USER
 export type RegisterUser = {
   name: string;
@@ -162,7 +159,6 @@ export type PostCardPropsType = {
   milkData: MilkResponseType;
   loggedUserId: string;
   loggedUserName: string;
-  triggerRefetch: boolean;
-  setTriggerRefetch: (triggerRefetch: boolean) => void;
   token: string;
+  fetchHomeData: () => Promise<void>;
 };

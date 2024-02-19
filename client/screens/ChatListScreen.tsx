@@ -99,7 +99,7 @@ export default function ChatListScreen() {
                     numberOfLines={1}
                     ellipsizeMode="tail"
                   >
-                    {chat[1].lastMessage?.text}
+                    {chat[1].lastMessage?.text || "No chats yet"}
                   </Text>
                   <Text style={styles.timeStamp}>
                     {formatDate(dateConverter(chat[1].date)) || ""}

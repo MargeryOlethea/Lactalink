@@ -26,9 +26,8 @@ function PostCard({
   milkData,
   loggedUserId,
   loggedUserName,
-  setTriggerRefetch,
-  triggerRefetch,
   token,
+  fetchHomeData,
 }: PostCardPropsType) {
   // BUAT HANDLE TOMBOL CHAT ADA/GA
   const { isDonor } = useContext(LoginContext);
@@ -99,7 +98,7 @@ function PostCard({
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setTriggerRefetch(!triggerRefetch);
+      fetchHomeData();
 
       BoxAlert("Success!", "Success delete item!");
     } catch (error) {

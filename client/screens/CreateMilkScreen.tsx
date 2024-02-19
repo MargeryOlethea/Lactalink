@@ -69,6 +69,12 @@ export default function CreateMilkScreen() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      setMilkForm({
+        totalBags: "",
+        totalMl: "",
+        pumpDate: "",
+      });
+
       navigation.navigate("Home");
 
       BoxAlert("Success", "Success created post!");
@@ -104,8 +110,10 @@ export default function CreateMilkScreen() {
             style={styles.input}
             placeholder="ex: 10 bags"
             keyboardType="numeric"
-            onChangeText={(e) => handleInput("totalBag", e)}
+            onChangeText={(e) => handleInput("totalBags", e)}
             value={milkForm.totalBags}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* SIZE */}
@@ -116,6 +124,8 @@ export default function CreateMilkScreen() {
             keyboardType="numeric"
             onChangeText={(e) => handleInput("totalMl", e)}
             value={milkForm.totalMl}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* PUMP DATE */}
@@ -125,6 +135,8 @@ export default function CreateMilkScreen() {
             placeholder="YYYY-MM-DD"
             onChangeText={(e) => handleInput("pumpDate", e)}
             value={milkForm.pumpDate}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* BUTTON */}

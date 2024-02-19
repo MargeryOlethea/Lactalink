@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import {
   FlatList,
   Pressable,
@@ -102,43 +102,69 @@ export default function ChatRoomScreen() {
     }
   };
 
+  // ALWAYS SCROLL FROM THE BOTTOM
+  const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    // Scroll to the bottom of the list when component mounts
+    flatListRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
+
   return (
     <View style={styles.container}>
-      <FlatList
-        style={{ paddingHorizontal: 20, paddingVertical: 10 }}
-        data={messages}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent:
-                item.senderId == loggedUser ? "flex-end" : "flex-start",
-            }}
-          >
+      {/* CHATS BUBBLE */}
+      {messages.length === 0 && (
+        <View
+          style={{
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "gray" }}>Be the first one to start!</Text>
+        </View>
+      )}
+      {messages.length > 0 && (
+        <FlatList
+          style={{
+            paddingHorizontal: 20,
+            marginVertical: 10,
+            paddingVertical: -10,
+          }}
+          ref={flatListRef}
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
             <View
-              style={[
-                styles.chatBubble,
-                {
-                  backgroundColor:
-                    item.senderId == loggedUser ? "white" : "#8CB9BD",
-                },
-              ]}
+              style={{
+                flexDirection: "row",
+                justifyContent:
+                  item.senderId == loggedUser ? "flex-end" : "flex-start",
+              }}
             >
-              <Text
-                style={{
-                  color: item.senderId !== loggedUser ? "white" : "#1f2937",
-                }}
+              <View
+                style={[
+                  styles.chatBubble,
+                  {
+                    backgroundColor:
+                      item.senderId == loggedUser ? "white" : "#8CB9BD",
+                  },
+                ]}
               >
-                {item.text}
-              </Text>
+                <Text
+                  style={{
+                    color: item.senderId !== loggedUser ? "white" : "#1f2937",
+                  }}
+                >
+                  {item.text}
+                </Text>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      )}
 
       {/* TEXT INPUT */}
-
       <View style={styles.textContainer}>
         <TextInput
           style={styles.textInput}
@@ -146,6 +172,8 @@ export default function ChatRoomScreen() {
           onSubmitEditing={sendMessage}
           value={text}
           onChangeText={setText}
+          autoComplete="off"
+          autoCorrect={false}
         />
         <Pressable onPress={sendMessage}>
           <MaterialCommunityIcons
@@ -191,5 +219,6 @@ const styles = StyleSheet.create({
     shadowColor: "gray",
     shadowOpacity: 0.3,
     shadowOffset: { width: 2, height: 2 },
+    maxWidth: "80%",
   },
 });

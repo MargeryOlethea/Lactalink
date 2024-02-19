@@ -12,6 +12,8 @@ import BoxAlert from "../components/BoxAlert";
 import * as SecureStore from "expo-secure-store";
 import sliceStringToPairs from "../helpers/sliceLocation";
 import Loading from "../components/Loading";
+import { useFocusEffect } from "@react-navigation/native";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   // GET ID FOR CHAT
@@ -148,8 +150,8 @@ export default function HomeScreen() {
     }
   };
 
-  // FOR DELETE
-  const [triggerRefetch, setTriggerRefetch] = useState<boolean>(false);
+  // BUAT ROLE
+  const { setIsDonor } = useContext(LoginContext);
 
   useEffect(() => {
     fetchLocation();
@@ -161,12 +163,38 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
+    if (role === "donor") {
+      setIsDonor(true);
+    } else {
+      setIsDonor(false);
+    }
+  }, [role]);
+
+  useEffect(() => {
     fetchCity();
-  }, [province, triggerRefetch]);
+  }, [province]);
 
   useEffect(() => {
     fetchHomeData();
+    findCityName();
   }, [city, token]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchHomeData();
+      findCityName();
+    }, [city, token]),
+  );
+
+  // HANDLE CITY NAME
+  const [cityName, setCityName] = useState<string>("");
+
+  const findCityName = () => {
+    const cityObject = citiesList?.find((cityList) => cityList.id === city);
+    if (cityObject) {
+      setCityName(cityObject.name);
+    }
+  };
 
   if (loading) {
     return <Loading />;
@@ -208,6 +236,13 @@ export default function HomeScreen() {
       <ScrollView>
         <View style={styles.bottomContainer}>
           {/* CARD */}
+          <Text style={{ marginBottom: 15, color: "#5e8d91" }}>
+            <FontAwesome6 name="location-dot" size={14} color="#5e8d91" />{" "}
+            LOCATION:{" "}
+            <Text style={{ color: "#5e8d91", fontWeight: "800" }}>
+              {cityName}
+            </Text>
+          </Text>
           {milkDatas.length == 0 && (
             <View
               style={{
@@ -231,9 +266,8 @@ export default function HomeScreen() {
                 milkData={milkData}
                 loggedUserId={userId}
                 loggedUserName={name}
-                setTriggerRefetch={setTriggerRefetch}
-                triggerRefetch={triggerRefetch}
                 token={token}
+                fetchHomeData={fetchHomeData}
               />
             ))}
         </View>

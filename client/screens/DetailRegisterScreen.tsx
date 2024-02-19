@@ -163,6 +163,8 @@ export default function DetailRegisterScreen() {
           placeholder="your baby's name"
           onChangeText={(e) => handleInput("babyName", e)}
           value={formRegister.babyName}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         {/* DOB */}
@@ -172,6 +174,8 @@ export default function DetailRegisterScreen() {
           placeholder="YYYY-MM-DD"
           onChangeText={(e) => handleInput("babyDOB", e)}
           value={formRegister.babyDOB}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         {/* GENDER */}
@@ -487,9 +491,10 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   forbiddenText: {
-    color: "white",
+    color: "#d91204",
     marginTop: 10,
     paddingRight: 20,
+    fontWeight: "600",
   },
   button: {
     borderRadius: 50,

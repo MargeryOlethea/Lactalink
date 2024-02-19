@@ -102,6 +102,8 @@ export default function LoginScreen() {
           style={styles.input}
           placeholder="your e-mail"
           onChangeText={(e) => handleInput("email", e)}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         {/* PASSWORD */}
@@ -112,6 +114,8 @@ export default function LoginScreen() {
           placeholder="your password"
           onChangeText={(e) => handleInput("password", e)}
           onSubmitEditing={handleLogin}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
