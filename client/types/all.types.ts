@@ -74,6 +74,7 @@ export type RootNavigationParamList = {
   Home: undefined;
   Create: undefined;
   Chats: undefined;
+  Profile: undefined;
 };
 
 // HOME NAVIGATION STACK

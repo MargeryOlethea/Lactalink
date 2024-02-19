@@ -176,14 +176,16 @@ export default function HomeScreen() {
 
   useEffect(() => {
     fetchHomeData();
-    findCityName();
   }, [city, token]);
+
+  useEffect(() => {
+    findCityName();
+  }, [city, milkDatas]);
 
   useFocusEffect(
     React.useCallback(() => {
       fetchHomeData();
-      findCityName();
-    }, [city, token]),
+    }, [city, token, citiesList]),
   );
 
   // HANDLE CITY NAME
@@ -236,13 +238,18 @@ export default function HomeScreen() {
       <ScrollView>
         <View style={styles.bottomContainer}>
           {/* CARD */}
-          <Text style={{ marginBottom: 15, color: "#5e8d91" }}>
-            <FontAwesome6 name="location-dot" size={14} color="#5e8d91" />{" "}
-            LOCATION:{" "}
-            <Text style={{ color: "#5e8d91", fontWeight: "800" }}>
-              {cityName}
+          {cityName && (
+            <Text
+              style={{ marginBottom: 15, color: "#5e8d91", fontWeight: "600" }}
+            >
+              <FontAwesome6 name="location-dot" size={14} color="#5e8d91" />{" "}
+              LOCATION:{" "}
+              <Text style={{ color: "#5e8d91", fontWeight: "800" }}>
+                {cityName}
+              </Text>
             </Text>
-          </Text>
+          )}
+
           {milkDatas.length == 0 && (
             <View
               style={{
