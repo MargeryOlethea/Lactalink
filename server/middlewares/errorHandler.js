@@ -1,4 +1,4 @@
-const { MongoError } = require("mongodb");
+
 
 const errorHandler = (error, req, res, next) => {
   console.log(error, "<<<<< log di errorHandler");
@@ -11,9 +11,10 @@ const errorHandler = (error, req, res, next) => {
     });
   }
 
-  if (error.name == "MongoServerError") {
-    status = 400;
-    message = "Field must be unique";
+
+  if (error.name == "MongoServerError" && error.code == 11000) {
+    status = 400
+    message = Object.keys(error.keyPattern)[0] + " has been registered"
   }
 
   if (error.name == "LoginValidationInput") {
