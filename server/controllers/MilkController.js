@@ -23,19 +23,19 @@ class MilkController {
 
   static async getMilk(req, res, next) {
     /*
-    gender				+ 2 poin
-    rhesus				+ 5 poin
-    golongan darah 			+ 2 poin
-    halal/non halal 			+ 5 poin
-    Telur 					+ 2 poin
+    gender				              + 2 poin
+    rhesus			      	        + 5 poin
+    golongan darah 			        + 2 poin
+    halal/non halal 		        + 5 poin
+    Telur 				            	+ 2 poin
     Susu sapi (dan turunannya) 	+ 2 poin
-    Kacang-kacangan 			+ 2 poin
-    Kedelai 				+ 2 poin
-    Seafood 				+ 2 poin
-    Tepung 				+ 2 poin
-    Daging merah 			+ 2 poin
-    Makanan pedas 			+ 2 poin
-    Kafein				 	+ 2 poin
+    Kacang-kacangan 		      	+ 2 poin
+    Kedelai 				            + 2 poin
+    Seafood 				            + 2 poin
+    Tepung 				              + 2 poin
+    Daging merah 		          	+ 2 poin
+    Makanan pedas 		        	+ 2 poin
+    Kafein				            	+ 2 poin
     
     TOTAL: 	32 poin,
     */

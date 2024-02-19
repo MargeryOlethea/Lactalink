@@ -129,12 +129,35 @@ class UserController {
           '$unwind': {
             'path': '$user'
           }
+        }, {
+          '$project': {
+            'user.password': 0
+          }
         }
       ];
 
       const userLoginDetail = await UserDetail.aggregate(agg)
 
       res.status(200).json({ data: userLoginDetail[0] })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async editUserLoginDetail(req, res, next) {
+    try {
+      const { babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine } = req.body
+      const body = {
+        babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine
+      }
+
+      const updatedUserDetail = await UserDetail.updateOne({ UserId: new ObjectId(req.loginInfo.userId) }, body)
+
+      res.status(200).json({
+        message: "Successfully edit user detail",
+        data: updatedUserDetail
+      })
+
     } catch (error) {
       next(error)
     }
