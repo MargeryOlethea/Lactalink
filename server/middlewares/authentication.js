@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb")
 const { verifyToken } = require("../utils/jwtoken")
 
-const authentication = async (req, res, next) => {
+const authentication = (req, res, next) => {
   try {
     const access_token = req?.headers?.authorization?.split(" ")[1]
 
