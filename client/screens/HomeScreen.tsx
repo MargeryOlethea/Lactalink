@@ -12,8 +12,23 @@ import BoxAlert from "../components/BoxAlert";
 import * as SecureStore from "expo-secure-store";
 import sliceStringToPairs from "../helpers/sliceLocation";
 import Loading from "../components/Loading";
+import { useFocusEffect } from "@react-navigation/native";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 export default function HomeScreen() {
+  // GET ID FOR CHAT
+  const [userId, setUserId] = useState<string>("");
+  const fetchUserId = async () => {
+    try {
+      const loggedUserId = await SecureStore.getItemAsync("userId");
+      if (loggedUserId) {
+        setUserId(loggedUserId);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // GET NAME FOR HEADER
   const [name, setName] = useState<string>("");
   const fetchName = async () => {
@@ -110,9 +125,12 @@ export default function HomeScreen() {
       setLoading(true);
 
       const url = process.env.EXPO_PUBLIC_API_URL;
-      const { data } = await axios.get(`${url}/milks`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        `${url}/milks?compability=desc&location=${city}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       if (data) {
         setMilkDatas(data.data);
@@ -132,13 +150,25 @@ export default function HomeScreen() {
     }
   };
 
+  // BUAT ROLE
+  const { setIsDonor } = useContext(LoginContext);
+
   useEffect(() => {
     fetchLocation();
+    fetchUserId();
     fetchName();
     fetchRole();
     fetchToken();
     fetchHomeData();
   }, []);
+
+  useEffect(() => {
+    if (role === "donor") {
+      setIsDonor(true);
+    } else {
+      setIsDonor(false);
+    }
+  }, [role]);
 
   useEffect(() => {
     fetchCity();
@@ -147,6 +177,26 @@ export default function HomeScreen() {
   useEffect(() => {
     fetchHomeData();
   }, [city, token]);
+
+  useEffect(() => {
+    findCityName();
+  }, [city, milkDatas]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchHomeData();
+    }, [city, token, citiesList]),
+  );
+
+  // HANDLE CITY NAME
+  const [cityName, setCityName] = useState<string>("");
+
+  const findCityName = () => {
+    const cityObject = citiesList?.find((cityList) => cityList.id === city);
+    if (cityObject) {
+      setCityName(cityObject.name);
+    }
+  };
 
   if (loading) {
     return <Loading />;
@@ -188,9 +238,45 @@ export default function HomeScreen() {
       <ScrollView>
         <View style={styles.bottomContainer}>
           {/* CARD */}
-          {milkDatas.map((milkData) => (
-            <PostCard key={milkData._id} milkData={milkData} />
-          ))}
+          {cityName && (
+            <Text
+              style={{ marginBottom: 15, color: "#5e8d91", fontWeight: "600" }}
+            >
+              <FontAwesome6 name="location-dot" size={14} color="#5e8d91" />{" "}
+              LOCATION:{" "}
+              <Text style={{ color: "#5e8d91", fontWeight: "800" }}>
+                {cityName}
+              </Text>
+            </Text>
+          )}
+
+          {milkDatas.length == 0 && (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                marginVertical: "60%",
+              }}
+            >
+              <Text style={{ color: "gray", textAlign: "center" }}>
+                No post in this area yet.
+              </Text>
+              <Text style={{ color: "gray", textAlign: "center" }}>
+                You can explore another area using the location filter above.
+              </Text>
+            </View>
+          )}
+          {milkDatas.length > 0 &&
+            milkDatas.map((milkData) => (
+              <PostCard
+                key={milkData._id}
+                milkData={milkData}
+                loggedUserId={userId}
+                loggedUserName={name}
+                token={token}
+                fetchHomeData={fetchHomeData}
+              />
+            ))}
         </View>
       </ScrollView>
     </View>

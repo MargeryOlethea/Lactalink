@@ -4,7 +4,7 @@ import ChatRoomScreen from "../screens/ChatRoomScreen";
 import ChatListScreen from "../screens/ChatListScreen";
 import { ChatNavigationParamList } from "../types/all.types";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<ChatNavigationParamList>();
 
 function ChatListNavigationStack() {
   return (

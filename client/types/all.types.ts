@@ -1,6 +1,3 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Dispatch, SetStateAction } from "react";
-
 // REGISTER USER
 export type RegisterUser = {
   name: string;
@@ -67,7 +64,7 @@ export type MilkResponseType = {
 
 // CREATE NEW MILK POST
 export type MilkForm = {
-  totalBag: string;
+  totalBags: string;
   totalMl: string;
   pumpDate: string;
 };
@@ -77,6 +74,7 @@ export type RootNavigationParamList = {
   Home: undefined;
   Create: undefined;
   Chats: undefined;
+  Profile: undefined;
 };
 
 // HOME NAVIGATION STACK
@@ -127,4 +125,41 @@ export type LoginResponse = {
   name: string;
   role: string;
   userId: string;
+};
+
+// CHAT TYPE
+export type ChatDataType = {
+  [userId: string]: {
+    date: {
+      nanoseconds: number;
+      seconds: number;
+    };
+    userInfo: {
+      userId: string;
+      userName: string;
+    };
+    lastMessage?: {
+      text: string;
+    };
+  };
+};
+
+// MESSAGE TYPE
+export type MessagesDataType = {
+  text: string;
+  id: string;
+  senderId: string;
+  date: {
+    nanoseconds: number;
+    seconds: number;
+  };
+}[];
+
+// POST CARD PROPS TYPE
+export type PostCardPropsType = {
+  milkData: MilkResponseType;
+  loggedUserId: string;
+  loggedUserName: string;
+  token: string;
+  fetchHomeData: () => Promise<void>;
 };

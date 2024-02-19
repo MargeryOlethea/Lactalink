@@ -171,6 +171,8 @@ export default function RegisterScreen() {
             onChangeText={(e) => handleInput("name", e)}
             value={formRegister.name}
             placeholder="your name"
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* PROVINSI */}
@@ -216,6 +218,8 @@ export default function RegisterScreen() {
             onChangeText={(e) => handleInput("email", e.toLowerCase())}
             value={formRegister.email}
             placeholder="your e-mail"
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* PHONE NUMBER */}
@@ -225,6 +229,8 @@ export default function RegisterScreen() {
             onChangeText={(e) => handleInput("phoneNumber", e)}
             value={formRegister.phoneNumber}
             placeholder="your phone number"
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* PASSWORD */}
@@ -235,6 +241,8 @@ export default function RegisterScreen() {
             placeholder="your password"
             onChangeText={(e) => handleInput("password", e)}
             value={formRegister.password}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* BUTTON */}

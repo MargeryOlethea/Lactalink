@@ -7,13 +7,42 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { MilkForm } from "../types/all.types";
+import {
+  HomeNavigationParamList,
+  MilkForm,
+  RootNavigationParamList,
+} from "../types/all.types";
 import Logo from "../components/Logo";
+import axios, { AxiosError } from "axios";
+import BoxAlert from "../components/BoxAlert";
+import * as SecureStore from "expo-secure-store";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import Loading from "../components/Loading";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function CreateMilkScreen() {
-  // HANDLE REGISTER
+  // GET ACCESS TOKEN FOR POST
+  const [token, setToken] = useState<string>("");
+  const fetchToken = async () => {
+    try {
+      const loggedToken = await SecureStore.getItemAsync("token");
+      if (loggedToken) {
+        setToken(loggedToken);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchToken();
+    }, []),
+  );
+
+  // HANDLE INPUT
   const [milkForm, setMilkForm] = useState<MilkForm>({
-    totalBag: "",
+    totalBags: "",
     totalMl: "",
     pumpDate: "",
   });
@@ -21,6 +50,52 @@ export default function CreateMilkScreen() {
   const handleInput = (field: string, value: string): void => {
     setMilkForm({ ...milkForm, [field]: value });
   };
+
+  // HANDLE CREATE
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootNavigationParamList>>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const handleCreate = async () => {
+    try {
+      setLoading(true);
+
+      const body = {
+        totalBags: +milkForm.totalBags,
+        totalMl: +milkForm.totalMl,
+        pumpDate: milkForm.pumpDate,
+      };
+      const url = process.env.EXPO_PUBLIC_API_URL;
+      await axios.post(`${url}/milks`, body, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setMilkForm({
+        totalBags: "",
+        totalMl: "",
+        pumpDate: "",
+      });
+
+      navigation.navigate("Home");
+
+      BoxAlert("Success", "Success created post!");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message || "Oops! Something went wrong");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <>
       <View style={{ backgroundColor: "white", flex: 1 }}>
@@ -35,8 +110,10 @@ export default function CreateMilkScreen() {
             style={styles.input}
             placeholder="ex: 10 bags"
             keyboardType="numeric"
-            onChangeText={(e) => handleInput("totalBag", e)}
-            value={milkForm.totalBag}
+            onChangeText={(e) => handleInput("totalBags", e)}
+            value={milkForm.totalBags}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* SIZE */}
@@ -47,6 +124,8 @@ export default function CreateMilkScreen() {
             keyboardType="numeric"
             onChangeText={(e) => handleInput("totalMl", e)}
             value={milkForm.totalMl}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* PUMP DATE */}
@@ -56,10 +135,12 @@ export default function CreateMilkScreen() {
             placeholder="YYYY-MM-DD"
             onChangeText={(e) => handleInput("pumpDate", e)}
             value={milkForm.pumpDate}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* BUTTON */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleCreate}>
             <Text style={styles.buttonText}>Create Post</Text>
           </TouchableOpacity>
         </View>
