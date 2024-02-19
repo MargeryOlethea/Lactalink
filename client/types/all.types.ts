@@ -163,3 +163,25 @@ export type PostCardPropsType = {
   token: string;
   fetchHomeData: () => Promise<void>;
 };
+
+// RESPONSE FETCH DETAIL
+export type UserDetailResponseType = {
+  _id?: string;
+  babyName: string;
+  babyDOB: string;
+  babyGender: string;
+  bloodType: string;
+  bloodRhesus: string;
+  halal: boolean;
+  egg: boolean;
+  dairy: boolean;
+  nuts: boolean;
+  soy: boolean;
+  seafood: boolean;
+  flourOrWheat: boolean;
+  redMeat: boolean;
+  spicyFood: boolean;
+  caffeine: boolean;
+  __v?: number;
+  user: UserType;
+};

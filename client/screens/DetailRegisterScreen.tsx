@@ -353,6 +353,7 @@ export default function DetailRegisterScreen() {
           <Text style={styles.checkboxText}>Caffeine</Text>
         </View>
 
+        {/* AGREEMENT */}
         <View style={{ marginTop: 30 }}>
           <View style={styles.agreementContainer}>
             <Checkbox
