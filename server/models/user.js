@@ -15,10 +15,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  profilePictureUrl: {
-    type: String,
-    default: "https://static.thenounproject.com/png/4530368-200.png"
-  },
   location: {
     type: String,
     required: true

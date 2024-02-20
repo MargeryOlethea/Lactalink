@@ -9,13 +9,16 @@ const userSchema = new mongoose.Schema({
   totalBags: {
     type: Number,
     required: true,
+    min: 1
   },
   totalMl: {
     type: Number,
     required: true,
+    min: 1
   },
   pumpDate: {
-    type: Date
+    type: Date,
+    required: true
   },
   createdAt: {
     type: Date,

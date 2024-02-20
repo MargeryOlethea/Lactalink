@@ -6,6 +6,7 @@ const errorHandler = (error, req, res, next) => {
   let message = "Internal Server Error";
 
   if (error.name == "ValidationError") {
+    status = 400
     Object.keys(error.errors).forEach((key) => {
       message = error.errors[key].path + " " + error.errors[key].kind;
     });
@@ -22,14 +23,14 @@ const errorHandler = (error, req, res, next) => {
     message = "Email/Password is required";
   }
 
-  if (error.name == "LoginValidationError") {
-    status = 401;
-    message = "Email/Password is invalid";
+  if (error.name === "JsonWebTokenError") {
+    status = 401
+    message = "Invalid access_token"
   }
 
   if (error.name == "Unauthorized") {
-    status = 403;
-    message = "Unauthorized";
+    status = 401
+    message = "Unauthorized"
   }
 
   if (error.name == "Forbidden") {

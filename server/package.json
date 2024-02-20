@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --testPathPattern --coverage",
     "dev": "nodemon ./bin/www"
   },
   "keywords": [],
@@ -20,5 +20,10 @@
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.2",
     "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
   }
 }
