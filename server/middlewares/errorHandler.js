@@ -23,6 +23,11 @@ const errorHandler = (error, req, res, next) => {
     message = "Email/Password is required";
   }
 
+  if (error.name == "LoginValidationError") {
+    status = 401
+    message = "Invalid Email/Password"
+  }
+
   if (error.name === "JsonWebTokenError") {
     status = 401
     message = "Invalid access_token"

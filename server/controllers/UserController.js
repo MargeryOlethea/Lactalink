@@ -21,6 +21,7 @@ class UserController {
 
   static async ktpRegister(req, res, next) {
     try {
+      console.log(req.file, "<<filenya")
       const idKTP = await readTextFromImage(req.file.buffer);
 
       let result = null;

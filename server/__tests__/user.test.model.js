@@ -1,12 +1,12 @@
 const app = require("../app");
 const request = require("supertest");
 const mongoose = require("mongoose");
-const mongoDB = MONGODB_TEST_CONNECTION_STRING;
-mongoose.connect(mongoDB);
+const mongoDB = process.env.MONGODB_TEST_CONNECTION_STRING;
 const User = require("../models/user");
 
 describe("User test", () => {
   beforeAll(async () => {
+    mongoose.connect(mongoDB);
     await User.deleteOne({});
   });
 

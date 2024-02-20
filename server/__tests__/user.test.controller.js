@@ -6,6 +6,7 @@ const { default: mongoose } = require("mongoose");
 const User = require("../models/user");
 const readTextFromImage = require("../utils/gvision");
 const path = require("path");
+const fs = require("fs")
 
 let access_token_user;
 
@@ -62,12 +63,12 @@ describe("User Routes Test", () => {
     });
     it("shouldnt get all user", async () => {
       const response = await request(app).get("/users");
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(401);
     });
   });
 
   describe("POST /login - Login", () => {
-    it("201 Success Login", async () => {
+    it("200 Success Login", async () => {
       const body = { email: "ibu1@mail.com", password: "asdasd" };
       const response = await request(app).post("/login").send(body);
       expect(response.status).toBe(200);
@@ -129,7 +130,7 @@ describe("User Routes Test", () => {
         role: "donor",
       };
       const response = await request(app).post("/registration").send(body);
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(400);
     });
     it("failed register no email input", async () => {
       const body = {
@@ -141,7 +142,7 @@ describe("User Routes Test", () => {
         role: "donor",
       };
       const response = await request(app).post("/registration").send(body);
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(400);
     });
     it("failed register no password input", async () => {
       const body = {
@@ -152,31 +153,35 @@ describe("User Routes Test", () => {
         role: "donor",
       };
       const response = await request(app).post("/registration").send(body);
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(400);
     });
   });
 
   describe("Post /ktp-registration", () => {
-    it.skip("should failed register with ktp", async () => {
+    it("should success register with ktp", async () => {
       const filePath = path.resolve(
         __dirname,
-        "../KTP_REINARDUS_KINADAMAN.jpg"
+        "./assets/ktp-suriah.jpeg"
       );
-      const idKTP = await readTextFromImage(filePath);
 
-      let result = null;
-      if (idKTP) {
-        result = {
-          idKTP,
-          f4DKTP: idKTP.slice(0, 4), // 1st 4 digit KTP
-          provinceId: idKTP.slice(0, 2), // 1st 2 digit KTP
-          regencyId: idKTP.slice(2, 4), // 2nd 2 digit KTP
-        };
-      }
+      const imageBuffer = fs.readFileSync(filePath)
+
+      // const file = require("./assets/ktp-suriah.jpeg")
+      // const idKTP = await readTextFromImage(filePath);
+
+      // let result = null;
+      // if (idKTP) {
+      //   result = {
+      //     idKTP,
+      //     f4DKTP: idKTP.slice(0, 4), // 1st 4 digit KTP
+      //     provinceId: idKTP.slice(0, 2), // 1st 2 digit KTP
+      //     regencyId: idKTP.slice(2, 4), // 2nd 2 digit KTP
+      //   };
+      // }
       const response = await request(app)
         .post("/ktp-registration")
-        .send(result);
-      expect(response.status).toBe(500);
+        .attach("file", imageBuffer, "ktp-suriah.jpeg")
+      expect(response.status).toBe(200);
     });
   });
 
