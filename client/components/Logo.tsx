@@ -30,7 +30,7 @@ export default function Logo({
     <View onLayout={onLayoutRootView}>
       <Text
         style={{
-          fontFamily: "BrittanicLondon",
+          fontFamily: "Courgette",
           fontWeight: "800",
           fontSize: size ? size : 20,
           color: color ? color : "#8CB9BD",

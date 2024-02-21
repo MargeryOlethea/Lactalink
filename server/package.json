@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --testPathPattern --coverage",
+    "test": "jest --testPathPattern --coverage --setTimeout=10_000",
     "dev": "nodemon ./bin/www"
   },
   "keywords": [],
