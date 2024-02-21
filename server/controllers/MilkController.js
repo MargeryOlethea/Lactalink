@@ -157,10 +157,17 @@ class MilkController {
           }
         }
 
+<<<<<<< HEAD
         const percentage = Math.round(score / 32 * 100)
 
 
         return { ...milk, score: percentage }
+=======
+        const compability = Math.round(score / 32 * 100)
+
+
+        return { ...milk, score: compability }
+>>>>>>> development
       })
 
       if (compability) {
@@ -194,6 +201,7 @@ class MilkController {
         throw { name: "NotFound" }
       }
 
+<<<<<<< HEAD
       if ((getMilk.UserId).toString() != (req.loginInfo.userId).toString()) {
         throw { name: "Forbidden" }
       }
@@ -203,6 +211,17 @@ class MilkController {
       res.status(200).json({
         message: "Successfully delete milk",
         data: deletedMilk
+=======
+      if (getMilk.UserId != req.loginInfo.userId) {
+        throw { name: "Forbidden" }
+      }
+
+      const milk = await Milk.deleteOne({ _id: new ObjectId(id) })
+
+      res.status(200).json({
+        message: "Successfully delete milk",
+        data: milk
+>>>>>>> development
       })
     } catch (error) {
       next(error)
