@@ -84,14 +84,10 @@ class UserController {
 
       const access_token = createToken(payload);
 
-<<<<<<< HEAD
       res.status(200).json({
         message: "Successfully login",
         data: { access_token, ...payload },
       });
-=======
-      res.status(200).json({ message: "Successfully login", data: { access_token, ...payload } })
->>>>>>> development
     } catch (error) {
       next(error);
     }
