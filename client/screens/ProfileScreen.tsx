@@ -198,7 +198,7 @@ function ProfileScreen() {
                       : { color: "white", fontWeight: "800" }
                   }
                 >
-                  Edit Profile
+                  {editMode ? "Cancel" : "Edit Profile"}
                 </Text>
               </Pressable>
             </View>

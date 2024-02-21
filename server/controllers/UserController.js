@@ -149,7 +149,6 @@ class UserController {
 
   static async getUserLoginDetail(req, res, next) {
     try {
-      console.log("kena di sini kakakkkk, xxx");
       const agg = [
         {
           $match: {
