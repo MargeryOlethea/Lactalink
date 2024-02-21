@@ -1,10 +1,9 @@
-const User = require("../models/user")
-const UserDetail = require("../models/userDetail")
-const { ObjectId } = require("mongodb")
-const { comparePassword } = require("../utils/bcrypt")
-const { createToken } = require("../utils/jwtoken")
-const readTextFromImage = require("../utils/gvision")
-
+const User = require("../models/user");
+const UserDetail = require("../models/userDetail");
+const { ObjectId } = require("mongodb");
+const { comparePassword } = require("../utils/bcrypt");
+const { createToken } = require("../utils/jwtoken");
+const readTextFromImage = require("../utils/gvision");
 
 class UserController {
   // getAllUsers buat coba-coba aja
@@ -61,9 +60,8 @@ class UserController {
 
   static async login(req, res, next) {
     try {
-      const email = req.body.email.toLowerCase()
-      const password = req.body.password
-
+      const email = req.body.email.toLowerCase();
+      const password = req.body.password;
 
       if (!email || !password) {
         throw { name: "LoginValidationInput" };
@@ -153,25 +151,28 @@ class UserController {
     try {
       const agg = [
         {
-          '$match': {
-            'UserId': new ObjectId(req.loginInfo.userId)
-          }
-        }, {
-          '$lookup': {
-            'as': 'user',
-            'from': 'users',
-            'foreignField': '_id',
-            'localField': 'UserId'
-          }
-        }, {
-          '$unwind': {
-            'path': '$user'
-          }
-        }, {
-          '$project': {
-            'user.password': 0
-          }
-        }
+          $match: {
+            UserId: new ObjectId(req.loginInfo.userId),
+          },
+        },
+        {
+          $lookup: {
+            as: "user",
+            from: "users",
+            foreignField: "_id",
+            localField: "UserId",
+          },
+        },
+        {
+          $unwind: {
+            path: "$user",
+          },
+        },
+        {
+          $project: {
+            "user.password": 0,
+          },
+        },
       ];
 
       const userLoginDetail = await UserDetail.aggregate(agg);
@@ -184,20 +185,52 @@ class UserController {
 
   static async editUserLoginDetail(req, res, next) {
     try {
-      const { babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine } = req.body
+      const {
+        babyName,
+        babyDOB,
+        babyGender,
+        bloodType,
+        bloodRhesus,
+        halal,
+        egg,
+        dairy,
+        nuts,
+        soy,
+        seafood,
+        flourOrWheat,
+        redMeat,
+        spicyFood,
+        caffeine,
+      } = req.body;
       const body = {
-        babyName, babyDOB, babyGender, bloodType, bloodRhesus, halal, egg, dairy, nuts, soy, seafood, flourOrWheat, redMeat, spicyFood, caffeine
-      }
+        babyName,
+        babyDOB,
+        babyGender,
+        bloodType,
+        bloodRhesus,
+        halal,
+        egg,
+        dairy,
+        nuts,
+        soy,
+        seafood,
+        flourOrWheat,
+        redMeat,
+        spicyFood,
+        caffeine,
+      };
 
-      const updatedUserDetail = await UserDetail.updateOne({ UserId: new ObjectId(req.loginInfo.userId) }, body)
+      const updatedUserDetail = await UserDetail.updateOne(
+        { UserId: new ObjectId(req.loginInfo.userId) },
+        body,
+      );
 
       res.status(200).json({
         message: "Successfully edit user detail",
-        data: updatedUserDetail
-      })
-
+        data: updatedUserDetail,
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }
