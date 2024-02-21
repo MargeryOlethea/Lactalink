@@ -1,12 +1,36 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Logo from "../components/Logo";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { UnauthenticateParamList } from "../types/all.types";
+import axios, { AxiosError } from "axios";
+import BoxAlert from "../components/BoxAlert";
+import Loading from "../components/Loading";
 
 export default function IdRegisterScreen() {
-  const [image, setImage] = useState<string>();
+  // REDIRECT TO LOGIN
+  const navigation =
+    useNavigation<NativeStackNavigationProp<UnauthenticateParamList>>();
+
+  const redirectToLogin = () => {
+    navigation.navigate("login");
+  };
+
+  // HANDLE UPLOAD
+  const [image, setImage] = useState<string | null | undefined>();
+  const [fileName, setFileName] = useState<string | null | undefined>();
+  const [fileType, setFileType] = useState<string | null | undefined>();
 
   const imagePicker = async () => {
     try {
@@ -27,27 +51,63 @@ export default function IdRegisterScreen() {
     }
   };
 
+  // UPLOAD IMAGE
+  const [loading, setLoading] = useState<boolean>(false);
   const uploadImage = async () => {
     try {
+      setLoading(true);
       if (!image) {
         alert("No image selected");
         return;
       }
 
       const formData = new FormData();
-      const response = await fetch(image);
-      const blob = await response.blob();
-      formData.append("image", blob, "id-card");
 
-      //await axios post, form data, headers: content type : multipart/formData
+      // INI GA WORKING
+      // const response = await fetch(image);
+      // const blob = await response.blob();
 
-      //navigate
+      // console.log(blob, "ini blobnya");
 
-      //alert successfully upload, now please register
+      // if (fileName) {
+      //   formData.append("file", blob, fileName);
+      // }
+
+      // BISA TAPI KENA TYPESCRIPT
+
+      formData.append("file", { uri: image, type: fileType, name: fileName });
+
+      const url = process.env.EXPO_PUBLIC_API_URL;
+      const { data } = await axios.post(`${url}/ktp-registration`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const { f4DKTP, provinceId } = data.data;
+
+      navigation.navigate("register", { provinceId, cityId: f4DKTP });
+
+      BoxAlert(
+        "Success!",
+        "Successfully upload! Please complete your registration.",
+      );
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message || "Oops! Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -57,6 +117,12 @@ export default function IdRegisterScreen() {
           Moms helping moms, every step of the way.
         </Text>
         <Text style={styles.joinText}>Join our community now!</Text>
+        <View style={styles.subTitle}>
+          <Text style={styles.subTitleText}>Already have an account? </Text>
+          <Pressable onPress={redirectToLogin}>
+            <Text style={styles.pressableText}>Log in here</Text>
+          </Pressable>
+        </View>
       </View>
       <View style={styles.bottomContainer}>
         <Text style={styles.instruction}>
@@ -98,7 +164,7 @@ const styles = StyleSheet.create({
   },
   joinText: {
     marginTop: 70,
-    marginBottom: 30,
+    marginBottom: 5,
     color: "#1f2937",
   },
   bottomContainer: {
@@ -130,5 +196,19 @@ const styles = StyleSheet.create({
   uploadText: {
     color: "white",
     fontWeight: "800",
+  },
+  subTitle: {
+    flexDirection: "row",
+    marginBottom: 30,
+  },
+  subTitleText: {
+    color: "#1f2937",
+    fontSize: 12,
+  },
+  pressableText: {
+    fontWeight: "600",
+    color: "#8CB9BD",
+    fontSize: 12,
+    textDecorationLine: "underline",
   },
 });

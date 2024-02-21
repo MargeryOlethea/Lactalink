@@ -16,7 +16,8 @@ export type LocationFetchResponse = {
 };
 
 // REGISTER DETAIL
-export type RegisterDetail = {
+export type UserDetailType = {
+  _id?: string;
   babyName: string;
   babyDOB: string;
   babyGender: string;
@@ -29,9 +30,36 @@ export type RegisterDetail = {
   soy: boolean;
   seafood: boolean;
   flourOrWheat: boolean;
-  readMeat: boolean;
+  redMeat: boolean;
   spicyFood: boolean;
   caffeine: boolean;
+  __v?: number;
+};
+
+// USER TYPE
+export type UserType = {
+  _id: string;
+  name: string;
+  email: string;
+  location: string;
+  phoneNumber: string;
+  role: string;
+  isRegistered: boolean;
+};
+
+// MILK TYPE
+export type MilkResponseType = {
+  _id: string;
+  UserId: string;
+  totalBags: number;
+  totalMl: number;
+  pumpDate: string;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+  userdetail: UserDetailType;
+  user: UserType;
+  score: number;
 };
 
 // CREATE NEW MILK POST
@@ -52,33 +80,51 @@ export type RootNavigationParamList = {
 // HOME NAVIGATION STACK
 export type HomeNavigationParamList = {
   HomeScreen: undefined;
-  Chat: { roomId: string };
+  Chat: { roomId: string } | undefined;
 };
-
-// HOME PROPS
-export type HomeProps = NativeStackScreenProps<
-  HomeNavigationParamList,
-  "HomeScreen",
-  "Chat"
->;
 
 // CHAT NAVIGATION STACK
 export type ChatNavigationParamList = {
   ChatList: undefined;
-  Chat: { roomId: string };
+  Chat: { roomId: string } | undefined;
 };
 
-// CHAT PROPS
-export type ChatProps = NativeStackScreenProps<
-  ChatNavigationParamList,
-  "ChatList",
-  "Chat"
->;
+// REGISTER OR LOGIN STACK
+export type UnauthenticateParamList = {
+  login: undefined;
+  registerId: undefined;
+  register:
+    | {
+        provinceId: string | null | undefined;
+        cityId: string | null | undefined;
+      }
+    | undefined;
+  detailRegister: undefined;
+};
 
 //LOGIN CONTEXT
 export type LoginContextType = {
   isLoggedIn: boolean;
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
+  isDonor: boolean;
+  setIsDonor: (isDonor: boolean) => void;
+};
+
+// LOGIN FORM
+export type LoginInput = {
+  email: string;
+  password: string;
+};
+
+//LOGIN RESPONSE
+export type LoginResponse = {
+  access_token: string;
+  email: string;
+  isRegistered: boolean;
+  location: string;
+  name: string;
+  role: string;
+  userId: string;
 };
 
 // CHAT TYPE

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CreateMilkScreen from "../screens/CreateMilkScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -12,6 +12,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 const Tab = createBottomTabNavigator<RootNavigationParamList>();
 
 export default function RootNavigation() {
+  const { isDonor } = useContext(LoginContext);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -46,11 +47,14 @@ export default function RootNavigation() {
         component={HomeChatStackNavigation}
         options={{ headerShown: false }}
       />
-      <Tab.Screen
-        name="Create"
-        component={CreateMilkScreen}
-        options={{ title: "Create Post" }}
-      />
+      {isDonor && (
+        <Tab.Screen
+          name="Create"
+          component={CreateMilkScreen}
+          options={{ title: "Create Post" }}
+        />
+      )}
+
       <Tab.Screen
         name="Chats"
         component={ChatListNavigationStack}

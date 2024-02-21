@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import Logo from "../components/Logo";
 import { Dropdown } from "react-native-element-dropdown";
 import { useEffect, useState } from "react";
-import { LocationFetchResponse } from "../types/all.types";
-import axios from "axios";
+import { LocationFetchResponse, MilkResponseType } from "../types/all.types";
+import axios, { AxiosError } from "axios";
 import PostCard from "../components/PostCard";
 import { AntDesign } from "@expo/vector-icons";
 import { LoginContext } from "../contexts/LoginContext";
@@ -104,15 +104,13 @@ export default function HomeScreen() {
   };
 
   // HANDLE CITY
-  const userProvince = "36";
   const [citiesList, setCitiesList] = useState<LocationFetchResponse[]>();
-  const [selectedCity, setSelectedCity] = useState<string>();
+  const [city, setCity] = useState<string>();
   const fetchCity = async () => {
     try {
       const data = await axios.get(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${userProvince}.json`,
+        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${province}.json`,
       );
-
       setCitiesList(data.data);
     } catch (error) {
       console.log(error);
@@ -209,35 +207,33 @@ export default function HomeScreen() {
       <View style={styles.upperContainer}>
         <View>
           <Logo color="white" />
-          <Text style={styles.name}>Hi, Annisa!</Text>
-          <Text style={styles.role}>Role: Donor</Text>
+          <Text style={styles.name}>Hi, {name}!</Text>
+          <Text style={styles.role}>Role: {role}</Text>
         </View>
 
-        {citiesList && (
-          <View style={{ alignItems: "flex-end" }}>
-            {/* LOGOUT */}
-            <Pressable style={styles.logoutButton}>
-              <AntDesign name="logout" size={18} color="#5e8d91" />
-            </Pressable>
+        <View style={{ alignItems: "flex-end" }}>
+          {/* LOGOUT */}
+          <Pressable style={styles.logoutButton} onPress={handleLogout}>
+            <AntDesign name="logout" size={18} color="#5e8d91" />
+          </Pressable>
 
-            {/* FILTER BY LOCATION */}
-            <Text style={{ color: "white", fontWeight: "600" }}>
-              Filter by Location:
-            </Text>
+          {/* FILTER BY LOCATION */}
+          <Text style={{ color: "white", fontWeight: "600" }}>
+            Filter by Location:
+          </Text>
 
-            <Dropdown
-              style={styles.dropdownInput}
-              data={citiesList}
-              placeholderStyle={{ fontSize: 14, color: "white" }}
-              selectedTextStyle={{ fontSize: 10, color: "white" }}
-              labelField="name"
-              valueField="id"
-              placeholder="City..."
-              onChange={(e) => setSelectedCity(e.id)}
-              value={selectedCity}
-            />
-          </View>
-        )}
+          <Dropdown
+            style={styles.dropdownInput}
+            data={citiesList || []}
+            placeholderStyle={{ fontSize: 14, color: "white" }}
+            selectedTextStyle={{ fontSize: 10, color: "white" }}
+            labelField="name"
+            valueField="id"
+            placeholder="City..."
+            onChange={(e) => setCity(e.id)}
+            value={city}
+          />
+        </View>
       </View>
       <ScrollView>
         <View style={styles.bottomContainer}>

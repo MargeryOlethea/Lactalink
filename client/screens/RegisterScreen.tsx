@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -9,15 +9,43 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { LocationFetchResponse, RegisterUser } from "../types/all.types";
+import {
+  LocationFetchResponse,
+  RegisterUser,
+  UnauthenticateParamList,
+} from "../types/all.types";
 import Logo from "../components/Logo";
 import { Dropdown } from "react-native-element-dropdown";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import {
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import { roleDropdown } from "../data/dropdownDatas";
+import BoxAlert from "../components/BoxAlert";
+import Loading from "../components/Loading";
 
 export default function RegisterScreen() {
+  const route = useRoute<RouteProp<UnauthenticateParamList>>();
+  const cityId = route?.params?.cityId;
+  const provinceId = route?.params?.provinceId;
+
+  // REDIRECT TO LOGIN
+  const navigation =
+    useNavigation<NativeStackNavigationProp<UnauthenticateParamList>>();
+
+  const redirectToLogin = () => {
+    navigation.navigate("login");
+  };
+
   // HANDLE PROVINCE
   const [provincesList, setProvincesList] = useState<LocationFetchResponse[]>();
-  const [selectedProvince, setSelectedProvince] = useState<string>();
+  const [selectedProvince, setSelectedProvince] = useState<string>(
+    provinceId || "",
+  );
   const fetchProvince = async () => {
     try {
       const data = await axios.get(
@@ -32,7 +60,6 @@ export default function RegisterScreen() {
 
   // HANDLE CITY
   const [citiesList, setCitiesList] = useState<LocationFetchResponse[]>();
-  const [selectedCity, setSelectedCity] = useState<string>();
   const fetchCity = async () => {
     try {
       const data = await axios.get(
@@ -45,26 +72,55 @@ export default function RegisterScreen() {
     }
   };
 
-  useEffect(() => {
-    fetchProvince();
-    if (selectedProvince) {
-      fetchCity();
-    }
-  }, [selectedProvince]);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchProvince();
+    }, []),
+  );
 
-  // DROPDOWN ROLE
-  const roleDropdown = [
-    { label: "Receiver", value: "receiver" },
-    { label: "Donor", value: "donor" },
-  ];
+  useFocusEffect(
+    React.useCallback(() => {
+      if (selectedProvince) {
+        fetchCity();
+      }
+    }, [selectedProvince]),
+  );
 
   // HANDLE REGISTER
+  const [loading, setLoading] = useState<boolean>(false);
+  const handleRegister = async () => {
+    try {
+      setLoading(true);
+
+      const url = process.env.EXPO_PUBLIC_API_URL;
+
+      const { data } = await axios.post(`${url}/registration`, formRegister);
+
+      navigation.navigate("login");
+
+      BoxAlert("Success!", "Successfully registered, please login!");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          BoxAlert("Error!", error.response.data.message);
+        }
+      } else if (error instanceof Error) {
+        console.log(error.message);
+        BoxAlert("Error!", error.message || "Oops! Something went wrong");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // HANDLE INPUT
   const [formRegister, setFormRegister] = useState<RegisterUser>({
     name: "",
     email: "",
     password: "",
     profilePictureUrl: "",
-    location: "",
+    location: cityId || "",
     phoneNumber: "",
     role: "",
   });
@@ -72,6 +128,10 @@ export default function RegisterScreen() {
   const handleInput = (field: string, value: string): void => {
     setFormRegister({ ...formRegister, [field]: value });
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -82,7 +142,7 @@ export default function RegisterScreen() {
 
           <View style={styles.subTitle}>
             <Text style={styles.subTitleText}>Already have an account? </Text>
-            <Pressable>
+            <Pressable onPress={redirectToLogin}>
               <Text style={styles.pressableText}>Log in here</Text>
             </Pressable>
           </View>
@@ -106,18 +166,6 @@ export default function RegisterScreen() {
 
           {/* NAME */}
           <Text style={styles.label}>Name</Text>
-          <TextInput style={styles.input} placeholder="your name" />
-
-          {/* EMAIL */}
-          <Text style={styles.label}>Email</Text>
-          <TextInput style={styles.input} placeholder="your e-mail" />
-
-          {/* PHONE NUMBER */}
-          <Text style={styles.label}>Phone Number</Text>
-          <TextInput style={styles.input} placeholder="your phone number" />
-
-          {/* PASSWORD */}
-          <Text style={styles.label}>Password</Text>
           <TextInput
             style={styles.input}
             onChangeText={(e) => handleInput("name", e)}
@@ -157,14 +205,14 @@ export default function RegisterScreen() {
                 labelField="name"
                 valueField="id"
                 placeholder="your city..."
-                onChange={(city) => setSelectedCity(city.id)}
-                value={selectedCity}
+                onChange={(city) => handleInput("location", city.id)}
+                value={formRegister.location}
               />
             </>
           )}
 
-          {/* PROFILE PICTURE URL */}
-          <Text style={styles.label}>Profile Picture</Text>
+          {/* EMAIL */}
+          <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
             onChangeText={(e) => handleInput("email", e.toLowerCase())}
@@ -198,7 +246,7 @@ export default function RegisterScreen() {
           />
 
           {/* BUTTON */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
             <Text style={styles.buttonText}>Register Account</Text>
           </TouchableOpacity>
         </View>

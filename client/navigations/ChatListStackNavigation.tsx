@@ -8,16 +8,14 @@ const Stack = createNativeStackNavigator<ChatNavigationParamList>();
 
 function ChatListNavigationStack() {
   return (
-    <>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ChatList"
-          component={ChatListScreen}
-          options={{ title: "Chats" }}
-        />
-        <Stack.Screen name="Chat" component={ChatRoomScreen} />
-      </Stack.Navigator>
-    </>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="ChatList"
+        component={ChatListScreen}
+        options={{ title: "Chats" }}
+      />
+      <Stack.Screen name="Chat" component={ChatRoomScreen} />
+    </Stack.Navigator>
   );
 }
 

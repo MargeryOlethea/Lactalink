@@ -12,8 +12,8 @@ import DetailRegisterScreen from "../screens/DetailRegisterScreen";
 const Stack = createNativeStackNavigator();
 
 const StacksHolder = () => {
-  // const { isLoggedIn } = useContext(LoginContext) || { isLoggedIn: false }
-  const isLoggedIn = true;
+  const { isLoggedIn } = useContext(LoginContext) || { isLoggedIn: false };
+  // const isLoggedIn = false;
   return (
     <>
       <NavigationContainer>
