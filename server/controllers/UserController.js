@@ -51,6 +51,8 @@ class UserController {
         phoneNumber: req.body.phoneNumber,
         role: req.body.role,
       };
+
+      const newUser = await User.findOne({ email: body.email });
       await User.create(body);
       res.status(201).json({ message: "Successfully register" });
     } catch (error) {
@@ -62,13 +64,21 @@ class UserController {
     try {
       const email = req.body.email.toLowerCase();
       const password = req.body.password;
+      // CHECKING
+      console.log(email, password, "<< logged user");
 
       if (!email || !password) {
         throw { name: "LoginValidationInput" };
       }
 
       const checkUser = await User.findOne({ email });
-      if (!checkUser || !comparePassword(password, checkUser.password)) {
+      // CHECKING
+      console.log(checkUser, "<< logged user in database");
+
+      if (!checkUser) {
+        throw { name: "LoginValidationError" };
+      }
+      if (!comparePassword(password, checkUser.password)) {
         throw { name: "LoginValidationError" };
       }
 

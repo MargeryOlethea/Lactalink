@@ -6,16 +6,16 @@ const { default: mongoose } = require("mongoose");
 const User = require("../models/user");
 const readTextFromImage = require("../utils/gvision");
 const path = require("path");
-const fs = require("fs")
+const fs = require("fs");
 
 let access_token_user;
 
 beforeAll(async () => {
   mongoose.connect(process.env.MONGODB_TEST_CONNECTION_STRING);
-  const user1 = await User.insertMany({
+  const user1 = await User.create({
     name: "ibu1 d ts",
     email: "ibu1@mail.com",
-    password: "$2a$10$vhZxxgMmWGcsDHWGUA5MSuP/wyk6SP.2Hi1vadQqLbLtdhiIkcpdW",
+    password: "asdasd",
     location: "3674",
     phoneNumber: "+6280989901",
     role: "donor",
@@ -40,9 +40,9 @@ beforeAll(async () => {
   // });
 
   const payloadUser = {
-    userId: user1[0]._id,
-    email: user1[0].email,
-    role: user1[0].role,
+    userId: user1._id,
+    email: user1.email,
+    role: user1.role,
   };
 
   access_token_user = createToken(payloadUser);
@@ -98,8 +98,8 @@ describe("User Routes Test", () => {
   describe("POST/registration", () => {
     it("Success register", async () => {
       const body = {
-        name: "ibu2",
-        email: "ibu2@mail.com",
+        name: "ibu2test",
+        email: "ibu2_test@mail.com",
         password: "asdasd",
         location: "3674",
         phoneNumber: "+62809899210",
@@ -108,10 +108,10 @@ describe("User Routes Test", () => {
       const response = await request(app).post("/registration").send(body);
       expect(response.status).toBe(201);
     });
-    it("failed register unique name", async () => {
+    it("failed register unique email", async () => {
       const body = {
         name: "ibu1 d ts",
-        email: "ibu2@mail.com",
+        email: "ibu1@mail.com",
         password: "asdasd",
         location: "3674",
         phoneNumber: "+6280989921",
@@ -123,7 +123,7 @@ describe("User Routes Test", () => {
     it("failed register no name input", async () => {
       const body = {
         name: "",
-        email: "ibu2@mail.com",
+        email: "ibu2_test_nonameinput@mail.com",
         password: "asdasd",
         location: "3674",
         phoneNumber: "+6280989921",
@@ -158,29 +158,14 @@ describe("User Routes Test", () => {
   });
 
   describe("Post /ktp-registration", () => {
-    it.skip("should success register with ktp", async () => {
-      const filePath = path.resolve(
-        __dirname,
-        "./assets/ktp-suriah.jpeg"
-      );
+    it("should success register with ktp", async () => {
+      const filePath = path.resolve(__dirname, "./assets/ktp-suriah.jpeg");
 
-      const imageBuffer = fs.readFileSync(filePath)
+      const imageBuffer = fs.readFileSync(filePath);
 
-      // const file = require("./assets/ktp-suriah.jpeg")
-      // const idKTP = await readTextFromImage(filePath);
-
-      // let result = null;
-      // if (idKTP) {
-      //   result = {
-      //     idKTP,
-      //     f4DKTP: idKTP.slice(0, 4), // 1st 4 digit KTP
-      //     provinceId: idKTP.slice(0, 2), // 1st 2 digit KTP
-      //     regencyId: idKTP.slice(2, 4), // 2nd 2 digit KTP
-      //   };
-      // }
       const response = await request(app)
         .post("/ktp-registration")
-        .attach("file", imageBuffer, "ktp-suriah.jpeg")
+        .attach("file", imageBuffer, "ktp-suriah.jpeg");
       expect(response.status).toBe(200);
     });
   });
