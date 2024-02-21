@@ -14,7 +14,13 @@ router.post("/login", login);
 
 router.use(authentication);
 
+router.use(authentication)
 router.use("/users", users)
 router.use("/milks", milks)
+<<<<<<< HEAD
+=======
+router.use("/chatrooms", chatrooms)
+router.use("/chats", chats)
+>>>>>>> development
 
 module.exports = router;

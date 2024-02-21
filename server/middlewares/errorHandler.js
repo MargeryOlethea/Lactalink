@@ -23,6 +23,11 @@ const errorHandler = (error, req, res, next) => {
     message = "Email/Password is required";
   }
 
+  if (error.name == "LoginValidationError") {
+    status = 401
+    message = "Invalid Email/Password"
+  }
+
   if (error.name === "JsonWebTokenError") {
     status = 401
     message = "Invalid access_token"
@@ -34,9 +39,23 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error.name == "Forbidden") {
+<<<<<<< HEAD
     status = 403;
     message = "Forbidden";
   }
+=======
+    status = 403
+    message = "Forbidden"
+  }
+
+  if (error.name == "NotFound") {
+    status = 404
+    message = "Data is not found"
+  }
+
+  res.status(status).json({ message })
+}
+>>>>>>> development
 
   if (error.name == "NotFound") {
     status = 404;

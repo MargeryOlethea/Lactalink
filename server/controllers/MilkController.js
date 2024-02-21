@@ -92,79 +92,78 @@ class MilkController {
         UserId: req.loginInfo.userId,
       });
 
-
-      const milksWithCompability = milks.map(milk => {
-        let score = 0
+      const milksWithCompability = milks.map((milk) => {
+        let score = 0;
         if (milk.userdetail.gender === userLoginDetail.gender) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.bloodRhesus === userLoginDetail.bloodRhesus) {
-          score += 5
+          score += 5;
         }
         if (milk.userdetail.halal === userLoginDetail.halal) {
-          score += 5
+          score += 5;
         }
         if (milk.userdetail.egg === userLoginDetail.egg) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.dairy === userLoginDetail.dairy) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.nuts === userLoginDetail.nuts) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.soy === userLoginDetail.soy) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.seafood === userLoginDetail.seafood) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.flourOrWheat === userLoginDetail.flourOrWheat) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.redMeat === userLoginDetail.redMeat) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.spicyFood === userLoginDetail.spicyFood) {
-          score += 2
+          score += 2;
         }
         if (milk.userdetail.caffeine === userLoginDetail.caffeine) {
-          score += 2
+          score += 2;
         }
         // logic bloodType
         if (userLoginDetail.bloodType === "A") {
           if (milk.userdetail.bloodType === "A") {
-            score += 2
+            score += 2;
           }
           if (milk.userdetail.bloodType === "O") {
-            score += 2
+            score += 2;
           }
         }
         if (userLoginDetail.bloodType === "B") {
           if (milk.userdetail.bloodType === "B") {
-            score += 2
+            score += 2;
           }
           if (milk.userdetail.bloodType === "O") {
-            score += 2
+            score += 2;
           }
         }
         if (userLoginDetail.bloodType === "AB") {
           if (milk.userdetail.bloodType === "A") {
-            score += 2
+            score += 2;
           }
           if (milk.userdetail.bloodType === "B") {
-            score += 2
+            score += 2;
           }
           if (milk.userdetail.bloodType === "AB") {
-            score += 2
+            score += 2;
           }
           if (milk.userdetail.bloodType === "O") {
-            score += 2
+            score += 2;
           }
         }
         if (userLoginDetail.bloodType === "O") {
           if (milk.userdetail.bloodType === "O") {
-            score += 2
+            score += 2;
           }
         }
 
@@ -204,9 +203,9 @@ class MilkController {
         throw { name: "NotFound" };
       }
 
-      // if (getMilk.UserId !== req.loginInfo.userId) {
-      //   throw { name: "Forbidden" };
-      // }
+      if (getMilk.UserId.toString() != req.loginInfo.userId.toString()) {
+        throw { name: "Forbidden" };
+      }
 
       const deletedMilk = await Milk.deleteOne({ _id: new ObjectId(id) });
 
