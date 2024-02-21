@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb")
 const Milk = require("../models/milk")
 const UserDetail = require("../models/userDetail")
+const mongoose = require("mongoose")
 
 class MilkController {
 
@@ -193,7 +194,7 @@ class MilkController {
         throw { name: "NotFound" }
       }
 
-      if (getMilk.UserId != req.loginInfo.userId) {
+      if ((getMilk.UserId).toString() != (req.loginInfo.userId).toString()) {
         throw { name: "Forbidden" }
       }
 

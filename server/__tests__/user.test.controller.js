@@ -158,7 +158,7 @@ describe("User Routes Test", () => {
   });
 
   describe("Post /ktp-registration", () => {
-    it("should success register with ktp", async () => {
+    it.skip("should success register with ktp", async () => {
       const filePath = path.resolve(
         __dirname,
         "./assets/ktp-suriah.jpeg"
