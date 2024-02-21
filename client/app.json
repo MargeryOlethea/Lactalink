@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -27,7 +25,17 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Courgette/Courgette-Regular.ttf",
+            "./assets/fonts/sunday_morning_10/SundayMorning.ttf",
+            "./assets/fonts/BrittanicLondon.ttf"
+          ]
+        }
+      ],
+      "expo-secure-store"
     ]
   }
 }

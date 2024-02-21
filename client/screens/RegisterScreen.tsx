@@ -120,8 +120,11 @@ export default function RegisterScreen() {
           <Text style={styles.label}>Password</Text>
           <TextInput
             style={styles.input}
-            secureTextEntry={true}
-            placeholder="your password"
+            onChangeText={(e) => handleInput("name", e)}
+            value={formRegister.name}
+            placeholder="your name"
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* PROVINSI */}
@@ -164,7 +167,34 @@ export default function RegisterScreen() {
           <Text style={styles.label}>Profile Picture</Text>
           <TextInput
             style={styles.input}
-            placeholder="your profile picture URL"
+            onChangeText={(e) => handleInput("email", e.toLowerCase())}
+            value={formRegister.email}
+            placeholder="your e-mail"
+            autoComplete="off"
+            autoCorrect={false}
+          />
+
+          {/* PHONE NUMBER */}
+          <Text style={styles.label}>Phone Number</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(e) => handleInput("phoneNumber", e)}
+            value={formRegister.phoneNumber}
+            placeholder="your phone number"
+            autoComplete="off"
+            autoCorrect={false}
+          />
+
+          {/* PASSWORD */}
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry={true}
+            placeholder="your password"
+            onChangeText={(e) => handleInput("password", e)}
+            value={formRegister.password}
+            autoComplete="off"
+            autoCorrect={false}
           />
 
           {/* BUTTON */}

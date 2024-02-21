@@ -6,6 +6,8 @@ import { ComponentProps } from "react";
 import HomeChatStackNavigation from "./HomeChatStackNavigation";
 import { RootNavigationParamList } from "../types/all.types";
 import ChatListNavigationStack from "./ChatListStackNavigation";
+import { LoginContext } from "../contexts/LoginContext";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator<RootNavigationParamList>();
 
@@ -26,6 +28,11 @@ export default function RootNavigation() {
             iconName = focused
               ? "chatbox-ellipses"
               : "chatbox-ellipses-outline";
+          } else if (route.name === "Profile") {
+            iconName = focused
+              ? "person-circle-sharp"
+              : "person-circle-outline";
+            size = 30;
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -47,6 +54,11 @@ export default function RootNavigation() {
       <Tab.Screen
         name="Chats"
         component={ChatListNavigationStack}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

@@ -19,7 +19,13 @@ export default function LoginScreen() {
       <View style={styles.bottomContainer}>
         {/* EMAIL */}
         <Text style={styles.label}>Email</Text>
-        <TextInput style={styles.input} placeholder="your e-mail" />
+        <TextInput
+          style={styles.input}
+          placeholder="your e-mail"
+          onChangeText={(e) => handleInput("email", e)}
+          autoComplete="off"
+          autoCorrect={false}
+        />
 
         {/* PASSWORD */}
         <Text style={styles.label}>Password</Text>
@@ -27,6 +33,10 @@ export default function LoginScreen() {
           style={styles.input}
           secureTextEntry={true}
           placeholder="your password"
+          onChangeText={(e) => handleInput("password", e)}
+          onSubmitEditing={handleLogin}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         <TouchableOpacity style={styles.button}>

@@ -80,6 +80,8 @@ export default function DetailRegisterScreen() {
           placeholder="your baby's name"
           onChangeText={(e) => handleInput("babyName", e)}
           value={formRegister.babyName}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         {/* DOB */}
@@ -89,6 +91,8 @@ export default function DetailRegisterScreen() {
           placeholder="YYYY-MM-DD"
           onChangeText={(e) => handleInput("babyDOB", e)}
           value={formRegister.babyDOB}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         {/* GENDER */}
@@ -106,7 +110,9 @@ export default function DetailRegisterScreen() {
         />
 
         {/* BLOODTYPE */}
-        <Text style={styles.label}>Blood Type</Text>
+        <Text style={styles.label}>
+          {role == "receiver" ? "Your Baby Blood Type" : "Blood Type"}
+        </Text>
         <Dropdown
           style={styles.dropdownInput}
           data={bloodtypeDropdown}
@@ -114,13 +120,17 @@ export default function DetailRegisterScreen() {
           selectedTextStyle={{ fontSize: 14 }}
           labelField="label"
           valueField="value"
-          placeholder="your blood type"
-          onChange={(bloodtype) => handleInput("bloodtype", bloodtype.value)}
+          placeholder={
+            role == "receiver" ? "Your baby blood type" : "Your blood type"
+          }
+          onChange={(bloodtype) => handleInput("bloodType", bloodtype.value)}
           value={formRegister.bloodType}
         />
 
         {/* BLOOD RHESUS */}
-        <Text style={styles.label}>Blood Rhesus</Text>
+        <Text style={styles.label}>
+          {role == "receiver" ? "Your Baby Blood Rhesus" : "Blood Rhesus"}
+        </Text>
         <Dropdown
           style={styles.dropdownInput}
           data={bloodrhesusDropdown}
@@ -128,7 +138,9 @@ export default function DetailRegisterScreen() {
           selectedTextStyle={{ fontSize: 14 }}
           labelField="label"
           valueField="value"
-          placeholder="your blood rhesus"
+          placeholder={
+            role == "receiver" ? "Your baby blood rhesus" : "Your blood rhesus"
+          }
           onChange={(bloodrhesus) =>
             handleInput("bloodrhesus", bloodrhesus.value)
           }
@@ -264,6 +276,7 @@ export default function DetailRegisterScreen() {
           <Text style={styles.checkboxText}>Caffeine</Text>
         </View>
 
+        {/* AGREEMENT */}
         <View style={{ marginTop: 30 }}>
           <View style={styles.agreementContainer}>
             <Checkbox
@@ -400,9 +413,10 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   forbiddenText: {
-    color: "white",
+    color: "#d91204",
     marginTop: 10,
     paddingRight: 20,
+    fontWeight: "600",
   },
   button: {
     borderRadius: 50,
