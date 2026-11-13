@@ -79,3 +79,5 @@ Lactalink was created as a Hacktiv8 final project by:
 - [Margery Olethea](https://github.com/MargeryOlethea)
 - [Reinardus Kinadaman](https://github.com/reinardusk)
 - [Ridzki Permadi](https://github.com/rizzdKy)
+
+Margery built the mobile client: the screens and navigation, registration and login, milk listings, profile editing, and the live chat, plus the initial client and server setup.
